@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>篮球训练营 — 专业篮球技术学习平台</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: var(--transition);
+      display: block;
+    }
+    .feature-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: var(--shadow); }
+    .feature-card .feat-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+    .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); }
+    .feature-card p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.65; }
+    .feature-card .feat-link { display: inline-flex; align-items: center; gap: 4px; font-size: 0.83rem; color: var(--primary); font-weight: 600; margin-top: 1rem; transition: var(--transition); }
+    .feature-card:hover .feat-link { gap: 8px; }
+
+    .news-item { display: flex; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--border); }
+    .news-item:last-child { border-bottom: none; }
+    .news-icon { width: 44px; height: 44px; border-radius: var(--radius-sm); background: rgba(255,107,0,0.12); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .news-title { font-size: 0.93rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .news-meta { font-size: 0.78rem; color: var(--text-muted); }
+
+    .quote-section { background: linear-gradient(135deg, rgba(255,107,0,0.12), rgba(255,107,0,0.04)); border: 1px solid rgba(255,107,0,0.2); border-radius: var(--radius); padding: 3rem; text-align: center; position: relative; overflow: hidden; }
+    .quote-section::before { content: '\201C'; position: absolute; top: -20px; left: 30px; font-size: 10rem; color: rgba(255,107,0,0.08); font-family: Georgia, serif; line-height: 1; }
+    .quote-text { font-size: 1.4rem; font-weight: 700; line-height: 1.6; margin-bottom: 1rem; position: relative; }
+    .quote-author { font-size: 0.88rem; color: var(--text-muted); }
+    .quote-author span { color: var(--primary); font-weight: 600; }
+
+    .highlights-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+    .drill-preview { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .drill-preview-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .drill-preview-item { display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.5rem; border-bottom: 1px solid var(--border); transition: var(--transition); cursor: pointer; }
+    .drill-preview-item:last-child { border-bottom: none; }
+    .drill-preview-item:hover { background: rgba(255,107,0,0.04); }
+    .drill-num { font-size: 1.1rem; font-weight: 800; color: rgba(255,107,0,0.25); min-width: 28px; }
+    .drill-info h4 { font-size: 0.9rem; font-weight: 600; }
+    .drill-info p { font-size: 0.78rem; color: var(--text-muted); }
+    .drill-info { flex: 1; }
+
+    @media (max-width: 1024px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .features-grid { grid-template-columns: 1fr; } .highlights-row { grid-template-columns: 1fr; } .quote-text { font-size: 1.1rem; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">🏀</div>
+    <div class="logo-text">
+      <span class="site-name">篮球训练营</span>
+      <span class="site-sub">BASKETBALL ACADEMY</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="active">首页</a>
+    <a href="drills.html">训练动作</a>
+    <a href="plans.html">训练计划</a>
+    <a href="tactics.html">战术板</a>
+    <a href="knowledge.html">知识库</a>
+  </div>
+  <button class="nav-toggle" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-eyebrow">🏀 专业篮球训练平台</div>
+      <h1>提升你的<br><span class="highlight">篮球技术</span><br>从这里开始</h1>
+      <p>系统化的训练动作库、科学制定的训练计划、实战战术分析，帮助你从新手成长为场上的领袖球员。每一天的练习，都让你离梦想更近一步。</p>
+      <div class="hero-cta">
+        <a href="drills.html" class="btn btn-primary">📋 浏览训练动作</a>
+        <a href="plans.html" class="btn btn-outline">📅 查看训练计划</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-number" data-counter data-target="120" data-suffix="+">120+</div>
+          <div class="stat-label">训练动作</div>
+        </div>
+        <div>
+          <div class="stat-number" data-counter data-target="30" data-suffix="+">30+</div>
+          <div class="stat-label">战术方案</div>
+        </div>
+        <div>
+          <div class="stat-number" data-counter data-target="50" data-suffix="+">50+</div>
+          <div class="stat-label">知识文章</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="ball-wrap">
+        <div class="ball-glow"></div>
+        <div class="ball-graphic">
+          <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 25 150 Q 150 95 275 150" stroke="rgba(0,0,0,0.28)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M 25 150 Q 150 205 275 150" stroke="rgba(0,0,0,0.28)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M 150 25 Q 95 150 150 275" stroke="rgba(0,0,0,0.28)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M 150 25 Q 205 150 150 275" stroke="rgba(0,0,0,0.28)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="floating-card card-1">
+          <div class="fc-label">今日训练</div>
+          <div class="fc-value">投篮练习 🎯</div>
+        </div>
+        <div class="floating-card card-2">
+          <div class="fc-label">本周完成</div>
+          <div class="fc-value">5 / 6 天 ✅</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature Cards -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header animate-in" style="text-align:center;">
+      <div class="label">核心模块</div>
+      <h2 class="section-title">全方位篮球 <span>训练体系</span></h2>
+      <p class="section-subtitle">从基本功到高级战术，涵盖篮球训练的每一个维度</p>
+    </div>
+    <div class="features-grid">
+      <a href="drills.html" class="feature-card animate-in delay-1">
+        <span class="feat-icon">🏃</span>
+        <h3>训练动作库</h3>
+        <p>进攻、防守、脚步、投篮等专业训练动作，附详细步骤说明与动作要领。</p>
+        <span class="feat-link">查看动作 →</span>
+      </a>
+      <a href="plans.html" class="feature-card animate-in delay-2">
+        <span class="feat-icon">📅</span>
+        <h3>训练计划</h3>
+        <p>科学编排的周计划与月计划，根据不同水平与目标定制，循序渐进系统提升。</p>
+        <span class="feat-link">制定计划 →</span>
+      </a>
+      <a href="tactics.html" class="feature-card animate-in delay-3">
+        <span class="feat-icon">🗂️</span>
+        <h3>战术板</h3>
+        <p>经典战术图解与解析，涵盖进攻体系、防守布阵、快攻反击等多种战术方案。</p>
+        <span class="feat-link">学习战术 →</span>
+      </a>
+      <a href="knowledge.html" class="feature-card animate-in delay-4">
+        <span class="feat-icon">📖</span>
+        <h3>篮球知识库</h3>
+        <p>规则解析、体能理论、心理训练、营养建议，系统掌握篮球运动全领域知识。</p>
+        <span class="feat-link">探索知识 →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Content Highlights -->
+<section class="section">
+  <div class="container">
+    <div class="highlights-row">
+      <div>
+        <div class="section-header animate-in">
+          <div class="label">热门内容</div>
+          <h2 class="section-title">本周 <span>热门动作</span></h2>
+        </div>
+        <div class="drill-preview animate-in">
+          <div class="drill-preview-header">
+            <span style="font-weight:700;">🔥 精选训练动作</span>
+            <a href="drills.html" style="font-size:0.85rem;font-weight:600;color:var(--primary);">查看全部 →</a>
+          </div>
+          <div class="drill-preview-item">
+            <span class="drill-num">01</span>
+            <div class="drill-info">
+              <h4>蛮牛运球（体前变向）</h4>
+              <p>基础 · 控球 · 10分钟</p>
+            </div>
+            <span class="badge badge-primary">入门</span>
+          </div>
+          <div class="drill-preview-item">
+            <span class="drill-num">02</span>
+            <div class="drill-info">
+              <h4>急停跳投</h4>
+              <p>进阶 · 投篮 · 15分钟</p>
+            </div>
+            <span class="badge badge-info">中级</span>
+          </div>
+          <div class="drill-preview-item">
+            <span class="drill-num">03</span>
+            <div class="drill-info">
+              <h4>滑步防守移动</h4>
+              <p>基础 · 防守 · 10分钟</p>
+            </div>
+            <span class="badge badge-success">防守</span>
+          </div>
+          <div class="drill-preview-item">
+            <span class="drill-num">04</span>
+            <div class="drill-info">
+              <h4>欧步上篮</h4>
+              <p>进阶 · 上篮 · 20分钟</p>
+            </div>
+            <span class="badge badge-purple">技巧</span>
+          </div>
+          <div class="drill-preview-item">
+            <span class="drill-num">05</span>
+            <div class="drill-info">
+              <h4>三分线定点投篮</h4>
+              <p>进阶 · 投篮 · 30分钟</p>
+            </div>
+            <span class="badge badge-gold">进阶</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-header animate-in">
+          <div class="label">知识更新</div>
+          <h2 class="section-title">最新 <span>篮球知识</span></h2>
+        </div>
+        <div class="animate-in">
+          <div class="news-item">
+            <div class="news-icon">📐</div>
+            <div>
+              <div class="news-title">如何提高投篮命中率：从脚步到出手的全流程分析</div>
+              <div class="news-meta">投篮技术 · 5分钟阅读</div>
+            </div>
+          </div>
+          <div class="news-item">
+            <div class="news-icon">🛡️</div>
+            <div>
+              <div class="news-title">联防战术入门：2-3区域联防的站位与轮转原理</div>
+              <div class="news-meta">防守战术 · 7分钟阅读</div>
+            </div>
+          </div>
+          <div class="news-item">
+            <div class="news-icon">💪</div>
+            <div>
+              <div class="news-title">篮球专项体能训练：爆发力与横向移动速度提升方案</div>
+              <div class="news-meta">体能训练 · 6分钟阅读</div>
+            </div>
+          </div>
+          <div class="news-item">
+            <div class="news-icon">🧠</div>
+            <div>
+              <div class="news-title">阅读比赛的能力：提升篮球IQ的5个实战方法</div>
+              <div class="news-meta">篮球智慧 · 8分钟阅读</div>
+            </div>
+          </div>
+          <div class="news-item">
+            <div class="news-icon">🏃</div>
+            <div>
+              <div class="news-title">挡拆战术配合详解：持球人与掩护人的最优选择</div>
+              <div class="news-meta">进攻战术 · 6分钟阅读</div>
+            </div>
+          </div>
+          <div style="margin-top:1rem;">
+            <a href="knowledge.html" class="btn btn-outline" style="width:100%;justify-content:center;">查看全部文章 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quote -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="quote-section animate-in">
+      <div class="quote-text">天赋决定你能做什么，努力决定你能做多好。<br>良好的训练体系，决定你能走多远。</div>
+      <div class="quote-author">— 致每一位热爱篮球的人，<span>篮球训练营</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Platform Stats -->
+<section class="section">
+  <div class="container">
+    <div class="section-header animate-in" style="text-align:center;">
+      <div class="label">平台数据</div>
+      <h2 class="section-title">一站式 <span>篮球训练资源</span></h2>
+    </div>
+    <div class="card-grid card-grid-4">
+      <div class="card animate-in" style="text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">🏃</div>
+        <div class="stat-number" data-counter data-target="120" data-suffix="+">120+</div>
+        <div class="stat-label">训练动作</div>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.5rem;">涵盖进攻、防守、脚步、投篮等核心技术</p>
+      </div>
+      <div class="card animate-in delay-1" style="text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">📅</div>
+        <div class="stat-number" data-counter data-target="15" data-suffix="+">15+</div>
+        <div class="stat-label">训练计划</div>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.5rem;">从入门到专业水平的系统化训练方案</p>
+      </div>
+      <div class="card animate-in delay-2" style="text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">🗂️</div>
+        <div class="stat-number" data-counter data-target="30" data-suffix="+">30+</div>
+        <div class="stat-label">战术方案</div>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.5rem;">经典与现代战术体系的可视化图解</p>
+      </div>
+      <div class="card animate-in delay-3" style="text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">📖</div>
+        <div class="stat-number" data-counter data-target="50" data-suffix="+">50+</div>
+        <div class="stat-label">知识文章</div>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.5rem;">规则、体能、心理、营养全面覆盖</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:1rem;">
+          <div class="logo-icon">🏀</div>
+          <div class="logo-text">
+            <span class="site-name">篮球训练营</span>
+            <span class="site-sub">BASKETBALL ACADEMY</span>
+          </div>
+        </a>
+        <p>专注于提供系统化、科学化的篮球训练资源。无论你是初学者还是有一定基础的球员，都能在这里找到适合自己的训练方案。</p>
+      </div>
+      <div class="footer-col">
+        <h4>训练模块</h4>
+        <ul>
+          <li><a href="drills.html">训练动作库</a></li>
+          <li><a href="drills.html">进攻技术</a></li>
+          <li><a href="drills.html">防守技术</a></li>
+          <li><a href="drills.html">脚步练习</a></li>
+          <li><a href="drills.html">投篮训练</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>战术知识</h4>
+        <ul>
+          <li><a href="tactics.html">战术板</a></li>
+          <li><a href="tactics.html">进攻战术</a></li>
+          <li><a href="tactics.html">防守战术</a></li>
+          <li><a href="knowledge.html">知识库</a></li>
+          <li><a href="knowledge.html">规则解析</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>训练计划</h4>
+        <ul>
+          <li><a href="plans.html">查看计划</a></li>
+          <li><a href="plans.html">入门计划</a></li>
+          <li><a href="plans.html">进阶计划</a></li>
+          <li><a href="plans.html">专项提升</a></li>
+          <li><a href="plans.html">备赛计划</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 <span>篮球训练营</span> · 热爱篮球，专注进步 🏀
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

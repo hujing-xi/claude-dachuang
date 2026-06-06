@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>训练动作 — 篮球训练营</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .drills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .search-bar {
+      display: flex; align-items: center;
+      background: var(--bg-card); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 16px;
+      gap: 8px; transition: var(--transition); flex: 1; max-width: 380px;
+    }
+    .search-bar:focus-within { border-color: var(--primary); }
+    .search-bar input { background: none; border: none; outline: none; color: var(--text-primary); font-size: 0.92rem; flex: 1; }
+    .search-bar input::placeholder { color: var(--text-muted); }
+
+    .intensity-bar {
+      display: flex; gap: 4px; align-items: center; margin-top: 6px;
+    }
+    .intensity-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--border);
+    }
+    .intensity-dot.filled { background: var(--primary); }
+
+    .drill-tips {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .drill-tips h5 {
+      font-size: 0.8rem; color: var(--primary); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem;
+    }
+    .drill-tips ul { display: flex; flex-direction: column; gap: 0.3rem; }
+    .drill-tips ul li { font-size: 0.83rem; color: var(--text-muted); padding-left: 1rem; position: relative; }
+    .drill-tips ul li::before { content: '•'; position: absolute; left: 0; color: var(--primary); }
+
+    @media (max-width: 900px) { .drills-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 580px) { .drills-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">🏀</div>
+    <div class="logo-text">
+      <span class="site-name">篮球训练营</span>
+      <span class="site-sub">BASKETBALL ACADEMY</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">首页</a>
+    <a href="drills.html" class="active">训练动作</a>
+    <a href="plans.html">训练计划</a>
+    <a href="tactics.html">战术板</a>
+    <a href="knowledge.html">知识库</a>
+  </div>
+  <button class="nav-toggle" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="page-header">
+  <h1>训练 <span>动作库</span></h1>
+  <p>专业篮球训练动作收录，涵盖进攻、防守、脚步、投篮四大核心技术板块，附详细步骤与训练要领</p>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <div class="search-row">
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" id="drill-search" placeholder="搜索训练动作...">
+      </div>
+      <span style="font-size:0.85rem;color:var(--text-muted);">共收录 <strong style="color:var(--primary);">28</strong> 个训练动作</span>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <button class="filter-tab active" data-filter="all">全部动作</button>
+      <button class="filter-tab" data-filter="offense">⚡ 进攻技术</button>
+      <button class="filter-tab" data-filter="defense">🛡️ 防守技术</button>
+      <button class="filter-tab" data-filter="footwork">👟 脚步训练</button>
+      <button class="filter-tab" data-filter="shooting">🎯 投篮训练</button>
+    </div>
+
+    <!-- Drills Grid -->
+    <div class="drills-grid">
+
+      <!-- Offense -->
+      <div class="drill-card animate-in" data-category="offense">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-orange">⚡</div>
+          <div style="flex:1;">
+            <h3>体前变向运球</h3>
+            <p class="text-muted" style="font-size:0.8rem;">基础运球技术</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-primary">进攻</span>
+            <span class="badge badge-success">入门</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 10分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>低重心站立，双脚与肩同宽，膝盖微弯</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>右手在体前控球，以指腹拍球，手腕发力</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>将球从右侧推到体前，左手接球，完成变向</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>变向时重心向左移，同步完成身体方向切换</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>始终保持低重心，不要在变向时站直</li>
+              <li>拍球点尽量低，减少失误概率</li>
+              <li>先慢后快，确保动作准确再加速</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="offense">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-orange">⚡</div>
+          <div style="flex:1;">
+            <h3>背后运球</h3>
+            <p class="text-muted" style="font-size:0.8rem;">进阶运球变向</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-primary">进攻</span>
+            <span class="badge badge-info">中级</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 15分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>持球向前运球，保持控球节奏</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>右手将球从腰部后方推向左侧，手肘发力</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>左手在左侧低位接球，身体随之转向</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>保持运球连贯，避免停顿导致走步</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>球经过背后时不能太高，防止被断球</li>
+              <li>身体重心前倾，保持运动态势</li>
+              <li>接球手要主动迎球，避免球弹偏</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="offense">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-orange">⚡</div>
+          <div style="flex:1;">
+            <h3>胯下运球变向</h3>
+            <p class="text-muted" style="font-size:0.8rem;">突破保护技术</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-primary">进攻</span>
+            <span class="badge badge-info">中级</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 12分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>迈步至稳定站姿，两腿分开略宽于肩</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>右手将球从胯下推向左手，身体保持稳定</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>左手在低位迎球，身体轻微转向完成变向</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>连续练习，左右交替进行胯下变向</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>步子不要太小，确保球能顺利通过</li>
+              <li>头部始终保持抬起，观察场上情况</li>
+              <li>变向后立即加速，创造突破空间</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="offense">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-orange">⚡</div>
+          <div style="flex:1;">
+            <h3>欧步上篮</h3>
+            <p class="text-muted" style="font-size:0.8rem;">绕过防守的上篮技术</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-primary">进攻</span>
+            <span class="badge badge-purple">高级</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 20分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>带球突破切入，向防守者方向直线加速</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>第一步踏在防守者侧面，重心偏移</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>第二步大幅度迈向另一侧，绕过防守</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>起跳上篮，利用身体位置保护球</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>两步节奏要快，避免被防守识破</li>
+              <li>起跳高度不必过高，注重位置优势</li>
+              <li>注意合法的步数规则（2步内起跳）</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="offense">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-orange">⚡</div>
+          <div style="flex:1;">
+            <h3>挡拆配合跑位</h3>
+            <p class="text-muted" style="font-size:0.8rem;">双人配合进攻技术</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-primary">进攻</span>
+            <span class="badge badge-info">中级</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 25分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>掩护队员站定在持球人防守者身侧</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>持球人向掩护方向运球，利用挡拆摆脱防守</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>掩护人顺势切入篮下（下顺），或拉开到外线（上提）</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>持球人根据防守选择突破、投篮或传给掩护人</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>掩护时要站稳，不能移动防守者</li>
+              <li>持球人要贴近掩护人跑动，缩短绕行距离</li>
+              <li>双方要培养默契，提前沟通战术选择</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="offense">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-orange">⚡</div>
+          <div style="flex:1;">
+            <h3>空切进攻</h3>
+            <p class="text-muted" style="font-size:0.8rem;">无球运动进攻</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-primary">进攻</span>
+            <span class="badge badge-success">入门</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 15分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>无球队员先做假动作，向外侧移动引开防守</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>突然切入篮下，速度要快，方向要果断</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>持球人观察时机，在最佳时刻传入内线</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>接球后立即攻篮，不要有多余停顿</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>假动作要逼真，让防守者重心偏移</li>
+              <li>切入时用手势指示队友传球时机</li>
+              <li>接球位置要在防守者身后，保护球权</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Defense -->
+      <div class="drill-card animate-in" data-category="defense">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-blue">🛡️</div>
+          <div style="flex:1;">
+            <h3>滑步防守移动</h3>
+            <p class="text-muted" style="font-size:0.8rem;">基础防守脚步</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-info">防守</span>
+            <span class="badge badge-success">入门</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 10分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>低重心防守姿势：双膝弯曲，腰背挺直</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>侧向移动时以先行腿带动，后腿跟上，不交叉</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>双脚保持平行，不要迈步或交叉步</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>移动过程中保持上半身稳定，双手张开</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>重心越低越好，加强股四头肌力量</li>
+              <li>双手伸开骚扰对手视线和传球路线</li>
+              <li>眼睛盯腰部，不要跟随对手假动作</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="defense">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-blue">🛡️</div>
+          <div style="flex:1;">
+            <h3>封盖时机训练</h3>
+            <p class="text-muted" style="font-size:0.8rem;">盖帽判断与执行</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-info">防守</span>
+            <span class="badge badge-purple">高级</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 20分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>保持低位防守，观察进攻球员起跳时机</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>在对手手腕上扬瞬间起跳，延迟判断避免假动作</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>起跳后用指尖触球，改变球的方向</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>落地后立刻保持防守姿势，防止反打</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>不要轻易出手，等待最佳封盖时机</li>
+              <li>盖帽目标是破坏出手，不必全力扇球</li>
+              <li>注意不要侵犯到进攻球员造成犯规</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="defense">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-blue">🛡️</div>
+          <div style="flex:1;">
+            <h3>防挡拆练习</h3>
+            <p class="text-muted" style="font-size:0.8rem;">对位与换防协作</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-info">防守</span>
+            <span class="badge badge-info">中级</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 20分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>提前预判挡拆，大声呼喊"有掩护"</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>方案一：绕过掩护，始终追防持球人</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>方案二：与队友换防，迅速盯防掩护人</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>换防后保持通讯，防止对手顺势切入</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>沟通是关键，提前呼叫防止被突然换防</li>
+              <li>绕过掩护时走外侧，减少被挡出距离</li>
+              <li>换防后立即确认自己的防守对象</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="defense">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-blue">🛡️</div>
+          <div style="flex:1;">
+            <h3>断球时机训练</h3>
+            <p class="text-muted" style="font-size:0.8rem;">积极防守断截球</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-info">防守</span>
+            <span class="badge badge-info">中级</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 15分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>保持防守位置，观察运球手的运球规律和节奏</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>在球离手到地面的瞬间，伸手从下方扑球</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>断球成功后立刻转身护球，启动快攻</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>配合训练：练习拦截对方传球路线</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>不要赌博式扑球，会导致防守失位</li>
+              <li>预判传球方向，提前移动截断传球</li>
+              <li>断球后第一时间推进，进攻机会稍纵即逝</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footwork -->
+      <div class="drill-card animate-in" data-category="footwork">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-green">👟</div>
+          <div style="flex:1;">
+            <h3>跳绳综合训练</h3>
+            <p class="text-muted" style="font-size:0.8rem;">提升脚踝灵活性与弹跳</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-success">脚步</span>
+            <span class="badge badge-success">入门</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 15分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>基础双脚跳绳：200次热身，节奏均匀</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>单脚交替跳绳：左右各50次，提升平衡感</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>高抬腿跳绳：30秒快节奏，训练爆发力</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>双飞跳绳：每次起跳绳过脚下两圈，提升弹跳</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>跳绳时前脚掌落地，减少冲击保护膝盖</li>
+              <li>保持核心收紧，上身不要过度摇晃</li>
+              <li>呼吸节奏与跳跃节奏配合，避免过早疲劳</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="footwork">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-green">👟</div>
+          <div style="flex:1;">
+            <h3>三步上篮步伐</h3>
+            <p class="text-muted" style="font-size:0.8rem;">基础上篮步伐节奏</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-success">脚步</span>
+            <span class="badge badge-success">入门</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 20分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>从罚球线外侧运球切入，保持直线方向</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>右手上篮：右脚先迈（大步），左脚跟上（跳步）</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>以左脚为起跳脚，单脚起跳向篮圈送球</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>送球时用手指拨球，配合板球增加成功率</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>大步接小步的节奏要清晰，不要混乱</li>
+              <li>左右手上篮要分开练习，保证双手均衡</li>
+              <li>习惯后可加入假动作，提升实战性</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="footwork">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-green">👟</div>
+          <div style="flex:1;">
+            <h3>急停步伐训练</h3>
+            <p class="text-muted" style="font-size:0.8rem;">双脚急停与单脚急停</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-success">脚步</span>
+            <span class="badge badge-info">中级</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 15分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>以中速运球向前冲跑，持球保护</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>双脚急停：两脚同时落地，重心后移制动</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>跨步急停：先落前脚，后落后脚，单脚可旋转</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>急停后立刻进入投篮预备动作或传球姿势</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>急停后枢轴脚不能移动，否则走步违例</li>
+              <li>急停时控制重心，避免往前冲或失去平衡</li>
+              <li>跨步急停提供更灵活的旋转空间</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="footwork">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-green">👟</div>
+          <div style="flex:1;">
+            <h3>T形敏捷跑</h3>
+            <p class="text-muted" style="font-size:0.8rem;">多方向快速启动</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-success">脚步</span>
+            <span class="badge badge-info">中级</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 20分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>设置T形标志锥，间距约4-5米</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>从起点全速直线冲到中点，触锥后侧滑到左点</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>侧滑跨越到右侧端点，再侧滑回中点</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>最后倒退跑回起点，全程计时比拼</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>侧滑时不要交叉步，保持面对前方</li>
+              <li>每次触锥要完整，训练方向改变能力</li>
+              <li>目标时间：进阶球员10秒以内完成</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shooting -->
+      <div class="drill-card animate-in" data-category="shooting">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-gold">🎯</div>
+          <div style="flex:1;">
+            <h3>定点投篮训练</h3>
+            <p class="text-muted" style="font-size:0.8rem;">建立稳定投篮手感</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-gold">投篮</span>
+            <span class="badge badge-success">入门</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 30分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>从罚球线附近定点站位，确认脚与目标的对齐</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>握球于肩上，肘部正对篮圈，手腕放松</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>起跳时双膝发力，高点出手，手腕前拨送球</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>保持投篮后续动作（Follow Through），手指向下</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>BEEF原则：平衡-眼睛-肘部-跟随动作</li>
+              <li>瞄准篮圈前沿，提高入篮角度</li>
+              <li>每个位置连进5球再移动到下个位置</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="shooting">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-gold">🎯</div>
+          <div style="flex:1;">
+            <h3>急停跳投</h3>
+            <p class="text-muted" style="font-size:0.8rem;">移动中的高效得分手段</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-gold">投篮</span>
+            <span class="badge badge-info">中级</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 25分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>运球向指定方向推进，保持控球稳定</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>以跨步急停或双脚急停停球，同步调整握球姿势</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>重心稳定后立刻起跳，在上升段出手</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>投篮弧度要高，给球充足的下降空间</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>急停要稳，不稳定的出手命中率低</li>
+              <li>配合假动作：急停后作势突破再投篮</li>
+              <li>在弧顶、45度角、底角多位置练习</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="shooting">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-gold">🎯</div>
+          <div style="flex:1;">
+            <h3>三分线投篮训练</h3>
+            <p class="text-muted" style="font-size:0.8rem;">远距离出手稳定性</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-gold">投篮</span>
+            <span class="badge badge-purple">高级</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 30分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>从三分线5个位置（两侧底角、45度、弧顶）轮流练习</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>接球后迅速确认站位，脚跟篮圈对齐</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>腿部发力配合上肢，充分利用全身力量</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>以高弧度出手，命中率目标40%以上</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>腿部力量是三分球稳定的关键来源</li>
+              <li>接球出手要快，减少防守调整时间</li>
+              <li>底角三分距离最短，是性价比最高的位置</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drill-card animate-in" data-category="shooting">
+        <div class="drill-card-top">
+          <div class="icon-box icon-box-gold">🎯</div>
+          <div style="flex:1;">
+            <h3>罚球练习</h3>
+            <p class="text-muted" style="font-size:0.8rem;">建立稳定的罚球习惯</p>
+          </div>
+        </div>
+        <div class="drill-card-body">
+          <div class="drill-meta">
+            <span class="badge badge-gold">投篮</span>
+            <span class="badge badge-success">入门</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);">⏱ 20分钟</span>
+          </div>
+          <div class="drill-steps">
+            <div class="drill-step"><span class="drill-step-num">1</span><span>站上罚球线，建立固定的投前例行动作</span></div>
+            <div class="drill-step"><span class="drill-step-num">2</span><span>深呼吸放松，专注于瞄准篮圈前沿</span></div>
+            <div class="drill-step"><span class="drill-step-num">3</span><span>统一出手节奏，不受外界干扰</span></div>
+            <div class="drill-step"><span class="drill-step-num">4</span><span>每次训练至少投20次，记录命中率并追踪进步</span></div>
+          </div>
+          <div class="drill-tips">
+            <h5>训练要点</h5>
+            <ul>
+              <li>固定例行动作有助于稳定情绪和节奏</li>
+              <li>目标命中率：入门70%，进阶80%，精英90%+</li>
+              <li>在疲劳状态下练习，模拟比赛末段罚球</li>
+            </ul>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:0.75rem;">
+            <span style="font-size:0.78rem;color:var(--text-muted);">强度</span>
+            <div class="intensity-bar">
+              <div class="intensity-dot filled"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+              <div class="intensity-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end drills-grid -->
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:1rem;">
+          <div class="logo-icon">🏀</div>
+          <div class="logo-text">
+            <span class="site-name">篮球训练营</span>
+            <span class="site-sub">BASKETBALL ACADEMY</span>
+          </div>
+        </a>
+        <p>专注于提供系统化、科学化的篮球训练资源。</p>
+      </div>
+      <div class="footer-col">
+        <h4>动作分类</h4>
+        <ul>
+          <li><a href="#">进攻技术</a></li>
+          <li><a href="#">防守技术</a></li>
+          <li><a href="#">脚步练习</a></li>
+          <li><a href="#">投篮训练</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>快速导航</h4>
+        <ul>
+          <li><a href="index.html">首页</a></li>
+          <li><a href="plans.html">训练计划</a></li>
+          <li><a href="tactics.html">战术板</a></li>
+          <li><a href="knowledge.html">知识库</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>难度级别</h4>
+        <ul>
+          <li><a href="#">入门动作</a></li>
+          <li><a href="#">中级动作</a></li>
+          <li><a href="#">高级动作</a></li>
+          <li><a href="#">专业动作</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 <span>篮球训练营</span> · 热爱篮球，专注进步 🏀
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

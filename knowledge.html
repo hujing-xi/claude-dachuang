@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>知识库 · 篮球训练营</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">
+        <div class="ball-icon">🏀</div>
+        <span>篮球<span class="brand-text">训练营</span></span>
+      </a>
+      <div class="hamburger"><span></span><span></span><span></span></div>
+      <ul class="navbar-nav">
+        <li><a href="index.html">首页</a></li>
+        <li><a href="drills.html">训练动作</a></li>
+        <li><a href="plans.html">训练计划</a></li>
+        <li><a href="tactics.html">战术板</a></li>
+        <li><a href="knowledge.html">知识库</a></li>
+        <li><a href="my-training.html">我的训练</a></li>
+      </ul>
+      <a href="my-training.html" class="navbar-cta">我的训练 ✚</a>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="page-hero">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">首页</a><span class="sep">/</span><span>知识库</span></div>
+        <h1>📚 篮球<span class="highlight">知识库</span></h1>
+        <p>比赛规则、运动科学、身体素质、伤病预防……打好篮球必须了解的理论基础。</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container">
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input id="knowledge-search" type="text" placeholder="搜索知识内容……" />
+        </div>
+
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all" data-target="#knowledge-grid">全部</button>
+          <button class="filter-tab" data-filter="rules" data-target="#knowledge-grid">比赛规则</button>
+          <button class="filter-tab" data-filter="science" data-target="#knowledge-grid">运动科学</button>
+          <button class="filter-tab" data-filter="injury" data-target="#knowledge-grid">伤病预防</button>
+          <button class="filter-tab" data-filter="history" data-target="#knowledge-grid">篮球历史</button>
+          <button class="filter-tab" data-filter="mindset" data-target="#knowledge-grid">心理与意识</button>
+        </div>
+
+        <div class="card-grid" id="knowledge-grid">
+
+          <div class="knowledge-card" data-category="rules" data-searchable>
+            <div class="k-icon">📋</div>
+            <div class="k-title">24秒违例规则详解</div>
+            <p class="k-text">进攻方必须在24秒内完成出手，否则判为违例交换球权。计时器在以下情况重置：投篮触及篮圈（重置为14秒）、对方犯规给予罚球、球从界外发球时。了解24秒规则有助于合理安排进攻节奏，特别是在关键时刻的战术操作。</p>
+            <div style="margin-top:12px;"><span class="badge badge-primary">规则</span></div>
+          </div>
+
+          <div class="knowledge-card" data-category="rules" data-searchable>
+            <div class="k-icon">🚶</div>
+            <div class="k-title">走步违例（Traveling）判定标准</div>
+            <p class="k-text">球员持球时在未运球情况下移动双脚超过允许步数即为走步。NBA规则中允许「收球步」（gather step），即开始运球动作时收球的那步不计入步数，之后可以再迈两步。欧洲步、三步上篮等技术正是基于这一规则设计的。</p>
+            <div style="margin-top:12px;"><span class="badge badge-primary">规则</span></div>
+          </div>
+
+          <div class="knowledge-card" data-category="rules" data-searchable>
+            <div class="k-icon">👊</div>
+            <div class="k-title">犯规类型：技术犯规 vs 违体犯规</div>
+            <p class="k-text"><strong>技术犯规：</strong>不文明行为、争议裁判判决、延误比赛等，罚一球并获球权。<strong>违体犯规：</strong>以阻止对手推进为目的的故意犯规（通常在快攻中），对方罚两球并获球权。<strong>取消资格犯规：</strong>严重不当行为，直接驱逐出场。</p>
+            <div style="margin-top:12px;"><span class="badge badge-primary">规则</span></div>
+          </div>
+
+          <div class="knowledge-card" data-category="science" data-searchable>
+            <div class="k-icon">💪</div>
+            <div class="k-title">篮球运动员的能量系统</div>
+            <p class="k-text">篮球比赛主要依赖<strong>磷酸肌酸系统</strong>（短时爆发，0~10秒）和<strong>糖酵解系统</strong>（中强度持续，10~90秒），有氧系统负责比赛间歇期的恢复。训练应兼顾三种能量系统：冲刺训练提升磷酸肌酸容量，间歇训练增强糖酵解能力，长时有氧加速恢复效率。</p>
+            <div style="margin-top:12px;"><span class="badge badge-blue">科学</span></div>
+          </div>
+
+          <div class="knowledge-card" data-category="science" data-searchable>
+            <div class="k-icon">🧠</div>
+            <div class="k-title">肌肉记忆与技术动作的形成</div>
+            <p class="k-text">技术动作的自动化需要通过<strong>有意识的刻意练习</strong>来建立神经回路。科学研究表明，一个动作需要正确重复约300~500次才开始形成肌肉记忆，错误重复同样会固化错误动作。因此「慢速练习正确手型」比「快速重复错误动作」更有价值。</p>
+            <div style="margin-top:12px;"><span class="badge badge-blue">科学</span></div>
+          </div>
+
+          <div class="knowledge-card" data-category="science" data-searchable>
+            <div class="k-icon">😴</div>
+            <div class="k-title">睡眠与运动表现的关系</div>
+            <p class="k-text">斯坦福大学对篮球运动员的研究显示，每晚睡眠从7小时增加到10小时后，球员的冲刺速度提升9%、罚球命中率提升9%、三分球命中率提升9.2%。深度睡眠期间生长激素大量分泌，是肌肉修复和技术巩固的关键时段。优质睡眠是最廉价的训练工具。</p>
+            <div style="margin-top:12px;"><span class="badge badge-blue">科学</span></div>
+          </div>
+
+          <div class="knowledge-card" data-category="injury" data-searchable>
+            <div class="k-icon">🦵</div>
+            <div class="k-title">踝关节扭伤的预防与处理</div>
+            <p class="k-text">踝关节扭伤是篮球最常见伤病。<strong>预防：</strong>每次训练前进行踝关节绕环活动、单脚平衡训练强化稳定肌群、选择支撑性好的篮球鞋。<strong>急性处理（RICE原则）：</strong>Rest（休息）→ Ice（冰敷20分钟，每2小时一次）→ Compression（加压包扎）→ Elevation（抬高患肢）。48小时后改为热敷促进恢复。</p>
+            <div style="margin-top:12px;"><span class="badge badge-red">伤病</span></div>
+          </div>
+
+          <div class="knowledge-card" data-category="injury" data-searchable>
+            <div class="k-icon">🦴</div>
+            <div class="k-title">膝关节保护：跳跃着陆技术</div>
+            <p class="k-text">错误的着陆技术（膝盖内扣、着地时膝盖过伸）是前交叉韧带（ACL）撕裂的主要原因，尤以女性球员高发。正确着陆技术：<strong>双脚同时落地、膝盖微弯朝脚尖方向、髋部下沉吸收冲击、避免膝盖内扣</strong>。建议将落地技术的专项训练纳入日常热身。</p>
+            <div style="margin-top:12px;"><span class="badge badge-red">伤病</span></div>
+          </div>
+
+          <div class="knowledge-card" data-category="history" data-searchable>
+            <div class="k-icon">🏛️</div>
+            <div class="k-title">篮球运动的起源</div>
+            <p class="k-text">1891年12月，加拿大体育教师<strong>詹姆斯·奈史密斯</strong>在美国麻省春田学院发明篮球。他用13条规则和两个桃篮创造了这项运动，最初每次投篮后需要人工取球。1892年，奈史密斯将规则公开发表，篮球迅速在美国各地传播。1936年柏林奥运会，篮球成为正式奥运项目。</p>
+            <div style="margin-top:12px;"><span class="badge badge-gray">历史</span></div>
+          </div>
+
+          <div class="knowledge-card" data-category="history" data-searchable>
+            <div class="k-icon">👑</div>
+            <div class="k-title">NBA历史上最具影响力的球员</div>
+            <p class="k-text"><strong>比尔·拉塞尔</strong>（11次总冠军）奠定防守与团队篮球基础；<strong>威尔特·张伯伦</strong>创下单场100分等多项至今未被打破的纪录；<strong>迈克尔·乔丹</strong>将篮球推向全球化；<strong>勒布朗·詹姆斯</strong>以全能型打法重新定义现代篮球；<strong>史蒂芬·库里</strong>革命性地改变了三分球的战术价值。</p>
+            <div style="margin-top:12px;"><span class="badge badge-gray">历史</span></div>
+          </div>
+
+          <div class="knowledge-card" data-category="mindset" data-searchable>
+            <div class="k-icon">🎯</div>
+            <div class="k-title">比赛心理：如何处理失误</div>
+            <p class="k-text">顶级球员与普通球员的区别之一是<strong>失误后的心理恢复速度</strong>。科比曾说："失误是训练的反馈，不是失败的定义。"建议：失误后给自己3秒时间「承认→放下→专注下一球」，不要在场上陷入自我否定的思维循环。研究表明，快速重新专注的球员全场失误率更低。</p>
+            <div style="margin-top:12px;"><span class="badge badge-green">心理</span></div>
+          </div>
+
+          <div class="knowledge-card" data-category="mindset" data-searchable>
+            <div class="k-icon">👁️</div>
+            <div class="k-title">篮球智商（IQ）的核心要素</div>
+            <p class="k-text">高篮球智商体现在：<strong>1. 场上阅读能力</strong>——预判比反应更重要；<strong>2. 无球时的跑位</strong>——好球员总是在正确位置出现；<strong>3. 知道什么时候不出手</strong>——避免低效进攻；<strong>4. 感知队友与对手的位置</strong>——真正的"全场视野"；<strong>5. 节奏控制</strong>——快慢切换让防守难以适应。看录像是最快提升篮球IQ的方法。</p>
+            <div style="margin-top:12px;"><span class="badge badge-green">心理</span></div>
+          </div>
+
+        </div>
+
+        <!-- Accordion FAQ -->
+        <div style="margin-top:56px;" class="fade-in">
+          <div class="section-header" style="text-align:left; margin-bottom:28px;">
+            <span class="overline">常见问题</span>
+            <h2 style="font-size:1.6rem;">FAQ</h2>
+          </div>
+          <div class="accordion-group">
+            <div class="accordion-item">
+              <button class="accordion-header">每天练习多少小时比较合适？<span class="acc-arrow">▼</span></button>
+              <div class="accordion-body">对于业余爱好者，每天1~1.5小时的专项训练足够，重质量而非数量。高水平竞技球员可以达到每天2~3小时，但必须保证充分的恢复。完全不训练的休息日同样重要——身体在休息中适应和成长。</div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-header">先练体能还是先练技术？<span class="acc-arrow">▼</span></button>
+              <div class="accordion-body">两者应该同步进行，但侧重不同阶段。初学者优先打好技术基础（投篮手型、运球控制），避免在没有正确动作模式的情况下进行大量体能训练。当基础技术初步稳定后，加入体能训练会让技术在实战强度下更稳定。简单说：技术基础 → 体能提升 → 技术与体能融合。</div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-header">如何快速提升三分球命中率？<span class="acc-arrow">▼</span></button>
+              <div class="accordion-body">三分球提升的关键：<strong>① 先稳固中距离</strong>，三分与中距离是同一投篮机制；<strong>② 每天200次定点投篮</strong>（固定5个点），记录命中率；<strong>③ 专注投篮机制而非命中率</strong>，前期不要在意进多少，只关注手型、弧度、落脚点是否一致；<strong>④ 接球即投练习</strong>，比静止投篮更贴近实战；<strong>⑤ 不要疲劳投篮</strong>，疲劳时的错误动作会形成错误记忆。</div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-header">身高不够能打好篮球吗？<span class="acc-arrow">▼</span></button>
+              <div class="accordion-body">完全可以。篮球是技术与团队配合的运动，身高只是众多因素之一。历史上许多矮身材球员（艾佛森、纳什、伊塞亚·托马斯）都取得了极高成就。矮身材球员应专注：速度与敏捷性、运球与传球技术、三分球拉开空间、防守积极性。找到自己的优势，用技术弥补身体条件。</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <p>© 2025 篮球训练营</p>
+          <div style="display:flex;gap:20px;">
+            <a href="index.html" style="font-size:0.85rem;color:var(--text-muted);">首页</a>
+            <a href="drills.html" style="font-size:0.85rem;color:var(--text-muted);">训练动作</a>
+            <a href="tactics.html" style="font-size:0.85rem;color:var(--text-muted);">战术板</a>
+            <a href="my-training.html" style="font-size:0.85rem;color:var(--primary);">我的训练 ✚</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="back-to-top">↑</div>
+  <script src="js/main.js"></script>
+</body>
+</html>

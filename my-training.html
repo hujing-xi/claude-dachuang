@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我的训练记录 · 篮球训练营</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ===== Scene Tabs ===== */
+    .scene-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .scene-tab {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+    .scene-tab .scene-emoji { font-size: 1.5rem; }
+    .scene-tab:hover { border-color: var(--primary); color: var(--primary); }
+    .scene-tab.active {
+      border-color: var(--primary);
+      background: rgba(255,107,0,0.12);
+      color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255,107,0,0.1);
+    }
+
+    /* ===== Sub-category tabs ===== */
+    .subcat-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .subcat-btn {
+      padding: 6px 16px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+    .subcat-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .subcat-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    /* ===== Add Button ===== */
+    .add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--gradient-primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: var(--transition);
+      box-shadow: 0 4px 16px rgba(255,107,0,0.35);
+    }
+    .add-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,0,0.5); }
+
+    /* ===== My Cards ===== */
+    .my-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      transition: var(--transition);
+      position: relative;
+    }
+    .my-card:hover { border-color: var(--primary); box-shadow: var(--shadow-hover); }
+    .my-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .my-card-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); line-height: 1.3; }
+    .my-card-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .icon-btn {
+      width: 30px; height: 30px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+    .icon-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .icon-btn.del:hover { border-color: var(--accent-red); color: var(--accent-red); }
+    .my-card-body { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+    .my-card-footer { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .my-card-date { font-size: 0.75rem; color: var(--text-muted); margin-left: auto; }
+
+    /* ===== Empty state ===== */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state .es-icon { font-size: 3.5rem; margin-bottom: 16px; opacity: 0.5; }
+    .empty-state h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; color: var(--text-secondary); }
+    .empty-state p { font-size: 0.88rem; max-width: 320px; margin: 0 auto 24px; line-height: 1.7; }
+
+    /* ===== Modal ===== */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px); transition: transform 0.25s ease;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .modal-title { font-size: 1.2rem; font-weight: 700; }
+    .modal-close {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.06); border: none;
+      color: var(--text-secondary); font-size: 1.1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .modal-close:hover { background: rgba(255,107,0,0.15); color: var(--primary); }
+
+    /* ===== Form ===== */
+    .form-group { margin-bottom: 18px; }
+    .form-label { display: block; font-size: 0.84rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: var(--transition);
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255,107,0,0.12);
+    }
+    .form-select option { background: var(--bg-card2); }
+    .form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+    .btn-cancel {
+      padding: 10px 20px; background: transparent; border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text-secondary); font-size: 0.9rem;
+      font-weight: 600; cursor: pointer; font-family: inherit; transition: var(--transition);
+    }
+    .btn-cancel:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-save {
+      padding: 10px 24px; background: var(--gradient-primary); border: none;
+      border-radius: var(--radius-sm); color: #fff; font-size: 0.9rem;
+      font-weight: 600; cursor: pointer; font-family: inherit; transition: var(--transition);
+    }
+    .btn-save:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(255,107,0,0.4); }
+
+    /* ===== Difficulty stars ===== */
+    .star-group { display: flex; gap: 6px; }
+    .star-btn { font-size: 1.2rem; cursor: pointer; opacity: 0.3; transition: var(--transition); background:none; border:none; padding:0; }
+    .star-btn.active { opacity: 1; }
+
+    /* ===== Stats strip ===== */
+    .my-stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 32px; }
+    .my-stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 18px; min-width: 100px; }
+    .my-stat .n { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+    .my-stat .l { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* toolbar */
+    .toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    .toolbar-left { flex: 1; }
+    .toolbar-search {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 8px 14px; max-width: 280px;
+    }
+    .toolbar-search input { background: transparent; border: none; outline: none; color: var(--text-primary); font-size: 0.87rem; font-family: inherit; width: 100%; }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .modal { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">
+        <div class="ball-icon">🏀</div>
+        <span>篮球<span class="brand-text">训练营</span></span>
+      </a>
+      <div class="hamburger"><span></span><span></span><span></span></div>
+      <ul class="navbar-nav">
+        <li><a href="index.html">首页</a></li>
+        <li><a href="drills.html">训练动作</a></li>
+        <li><a href="plans.html">训练计划</a></li>
+        <li><a href="tactics.html">战术板</a></li>
+        <li><a href="knowledge.html">知识库</a></li>
+        <li><a href="my-training.html">我的训练</a></li>
+      </ul>
+      <a href="my-training.html" class="navbar-cta">我的训练 ✚</a>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="page-hero">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">首页</a><span class="sep">/</span><span>我的训练记录</span></div>
+        <h1>📝 我的<span class="highlight">训练记录</span></h1>
+        <p>在篮球场、田径场、健身房记录你自己的训练素材、动作、计划和笔记，数据保存在本地。</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container">
+
+        <!-- Scene Tabs -->
+        <div class="scene-tabs">
+          <button class="scene-tab active" data-scene="basketball">
+            <span class="scene-emoji">🏀</span>
+            <span>篮球场</span>
+          </button>
+          <button class="scene-tab" data-scene="athletics">
+            <span class="scene-emoji">🏃</span>
+            <span>田径场</span>
+          </button>
+          <button class="scene-tab" data-scene="gym">
+            <span class="scene-emoji">💪</span>
+            <span>健身房</span>
+          </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="my-stats" id="stats-strip"></div>
+
+        <!-- Sub-category + Toolbar -->
+        <div class="subcat-tabs" id="subcat-tabs"></div>
+
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <div class="toolbar-search">
+              <span style="color:var(--text-muted);">🔍</span>
+              <input type="text" id="my-search" placeholder="搜索我的记录…" />
+            </div>
+          </div>
+          <button class="add-btn" id="open-add-modal">✚ 添加记录</button>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="card-grid" id="my-cards-grid"></div>
+
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <p>© 2025 篮球训练营 · 数据保存在浏览器本地</p>
+          <div style="display:flex;gap:20px;">
+            <a href="index.html" style="font-size:0.85rem;color:var(--text-muted);">首页</a>
+            <a href="drills.html" style="font-size:0.85rem;color:var(--text-muted);">训练动作</a>
+            <a href="tactics.html" style="font-size:0.85rem;color:var(--text-muted);">战术板</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">添加训练记录</div>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+
+      <form id="record-form">
+        <input type="hidden" id="edit-id" />
+
+        <div class="form-group">
+          <label class="form-label">标题 *</label>
+          <input class="form-input" id="f-title" type="text" placeholder="给这条记录起个名字" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">场景</label>
+            <select class="form-select" id="f-scene">
+              <option value="basketball">🏀 篮球场</option>
+              <option value="athletics">🏃 田径场</option>
+              <option value="gym">💪 健身房</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">分类</label>
+            <select class="form-select" id="f-subcat"></select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">内容 / 笔记</label>
+          <textarea class="form-textarea" id="f-content" placeholder="写下动作要领、训练步骤、注意事项……"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">类型</label>
+            <select class="form-select" id="f-type">
+              <option value="drill">训练动作</option>
+              <option value="plan">训练计划</option>
+              <option value="tactic">战术</option>
+              <option value="note">笔记</option>
+              <option value="video">视频素材</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">难度</label>
+            <div class="star-group" id="star-group">
+              <button type="button" class="star-btn active" data-v="1">★</button>
+              <button type="button" class="star-btn" data-v="2">★</button>
+              <button type="button" class="star-btn" data-v="3">★</button>
+              <button type="button" class="star-btn" data-v="4">★</button>
+              <button type="button" class="star-btn" data-v="5">★</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">标签（逗号分隔，如：投篮,基础,每日必练）</label>
+          <input class="form-input" id="f-tags" type="text" placeholder="投篮, 基础, 每日必练" />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" id="cancel-btn">取消</button>
+          <button type="submit" class="btn-save">💾 保存记录</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="back-to-top">↑</div>
+  <script src="js/main.js"></script>
+  <script>
+  // ============================================================
+  //  DATA LAYER
+  // ============================================================
+  const STORE_KEY = 'bball_my_training_v1';
+
+  function loadAll() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+    catch { return []; }
+  }
+  function saveAll(data) {
+    localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  }
+  function addRecord(rec) {
+    const all = loadAll();
+    rec.id = Date.now().toString();
+    rec.createdAt = new Date().toISOString();
+    all.unshift(rec);
+    saveAll(all);
+    return rec;
+  }
+  function updateRecord(id, changes) {
+    const all = loadAll().map(r => r.id === id ? { ...r, ...changes, updatedAt: new Date().toISOString() } : r);
+    saveAll(all);
+  }
+  function deleteRecord(id) {
+    saveAll(loadAll().filter(r => r.id !== id));
+  }
+
+  // ============================================================
+  //  SCENE CONFIG
+  // ============================================================
+  const SCENES = {
+    basketball: {
+      label: '篮球场', emoji: '🏀',
+      subcats: ['全部', '训练动作', '进攻战术', '防守战术', '比赛笔记', '投篮训练', '其他']
+    },
+    athletics: {
+      label: '田径场', emoji: '🏃',
+      subcats: ['全部', '短跑爆发力', '耐力训练', '敏捷训练', '柔韧性', '热身放松', '其他']
+    },
+    gym: {
+      label: '健身房', emoji: '💪',
+      subcats: ['全部', '力量训练', '核心训练', '有氧训练', '恢复拉伸', '辅助练习', '其他']
+    }
+  };
+
+  const TYPE_LABELS = {
+    drill: '训练动作', plan: '训练计划', tactic: '战术', note: '笔记', video: '视频素材'
+  };
+  const TYPE_BADGE = {
+    drill: 'badge-primary', plan: 'badge-blue', tactic: 'badge-red', note: 'badge-green', video: 'badge-gray'
+  };
+
+  // ============================================================
+  //  STATE
+  // ============================================================
+  let state = { scene: 'basketball', subcat: '全部', search: '' };
+  let editingId = null;
+  let starValue = 1;
+
+  // ============================================================
+  //  RENDER
+  // ============================================================
+  function renderSubcats() {
+    const container = document.getElementById('subcat-tabs');
+    const cfg = SCENES[state.scene];
+    container.innerHTML = cfg.subcats.map(s =>
+      `<button class="subcat-btn${s === state.subcat ? ' active' : ''}" data-sub="${s}">${s}</button>`
+    ).join('');
+    container.querySelectorAll('.subcat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.subcat = btn.dataset.sub;
+        renderSubcats();
+        renderCards();
+      });
+    });
+  }
+
+  function renderStats() {
+    const all = loadAll().filter(r => r.scene === state.scene);
+    const counts = {};
+    SCENES[state.scene].subcats.slice(1).forEach(s => { counts[s] = 0; });
+    all.forEach(r => { if (counts[r.subcat] !== undefined) counts[r.subcat]++; });
+    const strip = document.getElementById('stats-strip');
+    strip.innerHTML = `
+      <div class="my-stat"><div class="n">${all.length}</div><div class="l">全部记录</div></div>
+      ${Object.entries(counts).map(([k,v]) => v > 0 ? `<div class="my-stat"><div class="n">${v}</div><div class="l">${k}</div></div>` : '').join('')}
+    `;
+  }
+
+  function renderCards() {
+    const grid = document.getElementById('my-cards-grid');
+    let records = loadAll().filter(r => r.scene === state.scene);
+    if (state.subcat !== '全部') records = records.filter(r => r.subcat === state.subcat);
+    if (state.search) {
+      const q = state.search.toLowerCase();
+      records = records.filter(r =>
+        (r.title||'').toLowerCase().includes(q) ||
+        (r.content||'').toLowerCase().includes(q) ||
+        (r.tags||[]).join(',').toLowerCase().includes(q)
+      );
+    }
+
+    if (!records.length) {
+      grid.innerHTML = `
+        <div class="empty-state" style="grid-column:1/-1;">
+          <div class="es-icon">${SCENES[state.scene].emoji}</div>
+          <h3>还没有${state.subcat === '全部' ? '' : state.subcat + '的'}记录</h3>
+          <p>点击「添加记录」按钮，开始记录你在${SCENES[state.scene].label}的训练内容吧！</p>
+          <button class="add-btn" onclick="openAddModal()">✚ 添加第一条记录</button>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = records.map(r => {
+      const stars = '★'.repeat(r.difficulty || 1) + '☆'.repeat(5 - (r.difficulty || 1));
+      const tags = (r.tags || []).filter(Boolean);
+      const date = new Date(r.createdAt).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+      return `
+        <div class="my-card" data-id="${r.id}">
+          <div class="my-card-header">
+            <div class="my-card-title">${escHtml(r.title)}</div>
+            <div class="my-card-actions">
+              <button class="icon-btn edit" data-id="${r.id}" title="编辑">✏️</button>
+              <button class="icon-btn del" data-id="${r.id}" title="删除">🗑️</button>
+            </div>
+          </div>
+          <div class="my-card-body">${escHtml(r.content || '（暂无内容）')}</div>
+          <div class="my-card-footer">
+            <span class="badge ${TYPE_BADGE[r.type] || 'badge-gray'}">${TYPE_LABELS[r.type] || r.type}</span>
+            ${r.subcat ? `<span class="badge badge-gray">${escHtml(r.subcat)}</span>` : ''}
+            ${tags.map(t => `<span class="badge badge-gray">${escHtml(t)}</span>`).join('')}
+            <span style="color:var(--primary);font-size:0.8rem;">${stars}</span>
+            <span class="my-card-date">${date}</span>
+          </div>
+        </div>`;
+    }).join('');
+
+    // bind edit/delete
+    grid.querySelectorAll('.icon-btn.edit').forEach(btn => {
+      btn.addEventListener('click', (e) => { e.stopPropagation(); openEditModal(btn.dataset.id); });
+    });
+    grid.querySelectorAll('.icon-btn.del').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm('确认删除这条记录吗？')) {
+          deleteRecord(btn.dataset.id);
+          renderStats();
+          renderCards();
+        }
+      });
+    });
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderAll() {
+    renderSubcats();
+    renderStats();
+    renderCards();
+  }
+
+  // ============================================================
+  //  MODAL
+  // ============================================================
+  function updateSubcatOptions(scene) {
+    const sel = document.getElementById('f-subcat');
+    const cfg = SCENES[scene || state.scene];
+    sel.innerHTML = cfg.subcats.slice(1).map(s => `<option value="${s}">${s}</option>`).join('');
+  }
+
+  function setStars(v) {
+    starValue = v;
+    document.querySelectorAll('#star-group .star-btn').forEach(b => {
+      b.classList.toggle('active', parseInt(b.dataset.v) <= v);
+    });
+  }
+
+  function openAddModal() {
+    editingId = null;
+    document.getElementById('modal-title').textContent = '添加训练记录';
+    document.getElementById('record-form').reset();
+    document.getElementById('edit-id').value = '';
+    document.getElementById('f-scene').value = state.scene;
+    updateSubcatOptions(state.scene);
+    if (state.subcat !== '全部') document.getElementById('f-subcat').value = state.subcat;
+    setStars(1);
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function openEditModal(id) {
+    const rec = loadAll().find(r => r.id === id);
+    if (!rec) return;
+    editingId = id;
+    document.getElementById('modal-title').textContent = '编辑记录';
+    document.getElementById('edit-id').value = id;
+    document.getElementById('f-title').value = rec.title || '';
+    document.getElementById('f-scene').value = rec.scene || state.scene;
+    updateSubcatOptions(rec.scene);
+    document.getElementById('f-subcat').value = rec.subcat || '';
+    document.getElementById('f-content').value = rec.content || '';
+    document.getElementById('f-type').value = rec.type || 'drill';
+    document.getElementById('f-tags').value = (rec.tags || []).join(', ');
+    setStars(rec.difficulty || 1);
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    editingId = null;
+  }
+
+  // ============================================================
+  //  EVENT LISTENERS
+  // ============================================================
+  document.getElementById('open-add-modal').addEventListener('click', openAddModal);
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('cancel-btn').addEventListener('click', closeModal);
+  document.getElementById('modal-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  });
+
+  // Star buttons
+  document.querySelectorAll('#star-group .star-btn').forEach(btn => {
+    btn.addEventListener('click', () => setStars(parseInt(btn.dataset.v)));
+  });
+
+  // Scene selector in modal updates subcats
+  document.getElementById('f-scene').addEventListener('change', (e) => updateSubcatOptions(e.target.value));
+
+  // Form submit
+  document.getElementById('record-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('f-title').value.trim();
+    if (!title) return;
+
+    const rec = {
+      title,
+      scene: document.getElementById('f-scene').value,
+      subcat: document.getElementById('f-subcat').value,
+      content: document.getElementById('f-content').value.trim(),
+      type: document.getElementById('f-type').value,
+      difficulty: starValue,
+      tags: document.getElementById('f-tags').value.split(',').map(t => t.trim()).filter(Boolean)
+    };
+
+    if (editingId) {
+      updateRecord(editingId, rec);
+    } else {
+      addRecord(rec);
+    }
+
+    closeModal();
+    renderAll();
+  });
+
+  // Scene tab switch
+  document.querySelectorAll('.scene-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.scene-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      state.scene = tab.dataset.scene;
+      state.subcat = '全部';
+      renderAll();
+    });
+  });
+
+  // Search
+  document.getElementById('my-search').addEventListener('input', e => {
+    state.search = e.target.value;
+    renderCards();
+  });
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  renderAll();
+  </script>
+</body>
+</html>
