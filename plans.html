@@ -1,292 +1,578 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>训练计划 · 篮球训练营</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>训练计划 — 篮球训练营</title>
+  <link rel="stylesheet" href="css/style.css">
   <style>
-    .plan-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:28px; }
-    .week-schedule { border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); margin-top:48px; }
-    .week-schedule .ws-header { padding:18px 24px; background:var(--gradient-primary); display:flex; align-items:center; gap:12px; }
-    .week-schedule .ws-header h3 { font-size:1.1rem; font-weight:700; color:#fff; }
-    .ws-body { background:var(--bg-card); }
-    .ws-row { display:grid; grid-template-columns:90px 1fr; gap:0; border-bottom:1px solid var(--border); }
-    .ws-row:last-child { border-bottom:none; }
-    .ws-day { padding:16px 20px; background:var(--bg-card2); font-size:0.85rem; font-weight:700; color:var(--primary); display:flex; align-items:flex-start; border-right:1px solid var(--border); }
-    .ws-content { padding:16px 20px; font-size:0.87rem; color:var(--text-secondary); line-height:1.7; }
-    .intensity-bar { height:4px; border-radius:2px; margin-top:6px; }
-    .int-low { background:#2ecc71; width:33%; }
-    .int-mid { background:#f39c12; width:66%; }
-    .int-high { background:#e74c3c; width:100%; }
-    .int-rest { background:var(--border); width:100%; }
+    .plan-tabs {
+      display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap;
+    }
+    .plan-tab {
+      padding: 10px 22px; border-radius: var(--radius-sm);
+      font-size: 0.92rem; font-weight: 600; cursor: pointer;
+      border: 1.5px solid var(--border); color: var(--text-secondary);
+      background: transparent; transition: var(--transition);
+    }
+    .plan-tab:hover { border-color: var(--primary); color: var(--primary); }
+    .plan-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+    .plan-section { display: none; }
+    .plan-section.active { display: block; }
+
+    .plan-overview {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;
+    }
+
+    .overview-box {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+    }
+
+    .overview-box h4 { font-size: 0.9rem; color: var(--primary); font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .overview-stat { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .overview-stat:last-child { border-bottom: none; }
+    .overview-stat .label { font-size: 0.88rem; color: var(--text-secondary); }
+    .overview-stat .value { font-size: 0.88rem; font-weight: 700; color: var(--text-primary); }
+
+    .phase-header {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 2rem 0 1rem;
+    }
+    .phase-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1rem; flex-shrink: 0;
+    }
+    .phase-header h3 { font-size: 1.1rem; font-weight: 700; margin: 0; }
+    .phase-header p { font-size: 0.83rem; color: var(--text-muted); margin: 0; }
+
+    .day-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 1.25rem;
+      margin-bottom: 0.75rem; transition: var(--transition);
+    }
+    .day-card:hover { border-color: rgba(255,107,0,0.35); }
+
+    .day-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .day-header .day-title { font-weight: 700; font-size: 0.95rem; }
+
+    .workout-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .workout-item {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      background: rgba(255,255,255,0.03); border-radius: 6px;
+      font-size: 0.86rem;
+    }
+    .workout-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .workout-text { flex: 1; color: var(--text-secondary); }
+    .workout-text strong { color: var(--text-primary); }
+    .workout-duration { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; }
+
+    .rest-day {
+      background: var(--bg-card); border: 1px dashed var(--border);
+      border-radius: var(--radius-sm); padding: 1.25rem;
+      text-align: center; margin-bottom: 0.75rem;
+    }
+    .rest-day .rest-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .rest-day p { font-size: 0.85rem; color: var(--text-muted); }
+
+    .progress-overview {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2rem;
+    }
+
+    .skill-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.6rem 0; border-bottom: 1px solid var(--border);
+    }
+    .skill-row:last-child { border-bottom: none; }
+    .skill-name { min-width: 120px; font-size: 0.88rem; color: var(--text-secondary); }
+    .skill-bar { flex: 1; }
+    .skill-target { font-size: 0.78rem; color: var(--primary); min-width: 60px; text-align: right; }
+
+    @media (max-width: 768px) { .plan-overview { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="navbar-inner">
-      <a href="index.html" class="navbar-logo">
-        <div class="ball-icon">🏀</div>
-        <span>篮球<span class="brand-text">训练营</span></span>
-      </a>
-      <div class="hamburger"><span></span><span></span><span></span></div>
-      <ul class="navbar-nav">
-        <li><a href="index.html">首页</a></li>
-        <li><a href="drills.html">训练动作</a></li>
-        <li><a href="plans.html">训练计划</a></li>
-        <li><a href="tactics.html">战术板</a></li>
-        <li><a href="knowledge.html">知识库</a></li>
-      </ul>
-      <a href="drills.html" class="navbar-cta">开始训练 →</a>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">🏀</div>
+    <div class="logo-text">
+      <span class="site-name">篮球训练营</span>
+      <span class="site-sub">BASKETBALL ACADEMY</span>
     </div>
-  </nav>
-
-  <div class="page-wrapper">
-    <div class="page-hero">
-      <div class="container">
-        <div class="breadcrumb"><a href="index.html">首页</a><span class="sep">/</span><span>训练计划</span></div>
-        <h1>📋 训练<span class="highlight">计划</span></h1>
-        <p>科学系统的训练方案，从入门新手到专业球员，找到最适合你的训练节奏。</p>
-      </div>
-    </div>
-
-    <section class="section">
-      <div class="container">
-
-        <div class="filter-tabs">
-          <button class="filter-tab active" data-filter="all" data-target="#plans-grid">全部计划</button>
-          <button class="filter-tab" data-filter="beginner" data-target="#plans-grid">新手入门</button>
-          <button class="filter-tab" data-filter="intermediate" data-target="#plans-grid">进阶提升</button>
-          <button class="filter-tab" data-filter="advanced" data-target="#plans-grid">高水平</button>
-          <button class="filter-tab" data-filter="position" data-target="#plans-grid">位置专项</button>
-        </div>
-
-        <div class="plan-grid" id="plans-grid">
-
-          <div class="plan-card" data-category="beginner" data-searchable>
-            <div class="plan-header">
-              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                <span class="badge badge-green">新手入门</span>
-                <span class="badge badge-gray">4周</span>
-              </div>
-              <div class="plan-title">🌱 篮球零基础入门计划</div>
-              <div class="plan-meta">
-                <span>⏱ 每次 60 分钟</span>
-                <span>📅 每周 3 次</span>
-                <span>🎯 适合完全零基础</span>
-              </div>
-            </div>
-            <div class="plan-body">
-              <div class="day-row"><div class="day-label">第1周</div><div class="day-content">基础运球（原地拍球、行进间运球）+ 投篮手型练习（无跳投，只练出手）</div></div>
-              <div class="day-row"><div class="day-label">第2周</div><div class="day-content">体前变向运球 + 定点跳投（罚球线）+ 滑步防守基础动作</div></div>
-              <div class="day-row"><div class="day-label">第3周</div><div class="day-content">三步上篮（左右手）+ 胸前传球对练 + 折返跑体能训练</div></div>
-              <div class="day-row"><div class="day-label">第4周</div><div class="day-content">1对1基础对抗 + 综合复习前三周内容 + 半场3对3比赛实践</div></div>
-            </div>
-          </div>
-
-          <div class="plan-card" data-category="intermediate" data-searchable>
-            <div class="plan-header">
-              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                <span class="badge badge-blue">进阶提升</span>
-                <span class="badge badge-gray">8周</span>
-              </div>
-              <div class="plan-title">⚡ 进阶综合能力提升计划</div>
-              <div class="plan-meta">
-                <span>⏱ 每次 90 分钟</span>
-                <span>📅 每周 4 次</span>
-                <span>🎯 有基础者</span>
-              </div>
-            </div>
-            <div class="plan-body">
-              <div class="day-row"><div class="day-label">第1-2周</div><div class="day-content">高阶运球组合（胯下+背后+转身）+ 急停跳投 + 1对1防守对抗</div></div>
-              <div class="day-row"><div class="day-label">第3-4周</div><div class="day-content">后撤步训练 + 挡拆配合跑位 + 二打一快攻模拟</div></div>
-              <div class="day-row"><div class="day-label">第5-6周</div><div class="day-content">三分球专项（弧顶、45°、底角）+ 无球跑位 + 区域联防破解</div></div>
-              <div class="day-row"><div class="day-label">第7-8周</div><div class="day-content">综合技术融合训练 + 5对5全场对抗 + 针对弱项强化</div></div>
-            </div>
-          </div>
-
-          <div class="plan-card" data-category="advanced" data-searchable>
-            <div class="plan-header">
-              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                <span class="badge badge-primary">高水平</span>
-                <span class="badge badge-gray">12周</span>
-              </div>
-              <div class="plan-title">🏆 赛季前准备训练计划</div>
-              <div class="plan-meta">
-                <span>⏱ 每次 120 分钟</span>
-                <span>📅 每周 5 次</span>
-                <span>🎯 竞技水平球员</span>
-              </div>
-            </div>
-            <div class="plan-body">
-              <div class="day-row"><div class="day-label">第1-3周</div><div class="day-content">体能基础强化（力量+有氧），重点提升腿部爆发力与核心稳定性</div></div>
-              <div class="day-row"><div class="day-label">第4-6周</div><div class="day-content">技术精细化（投篮机制、传球视野），全场对抗模拟比赛</div></div>
-              <div class="day-row"><div class="day-label">第7-9周</div><div class="day-content">战术体系灌输（本队进攻战术、防守轮转），专项位置练习</div></div>
-              <div class="day-row"><div class="day-label">第10-12周</div><div class="day-content">高强度模拟比赛 + 心理状态调节 + 赛前减量，保证体能巅峰</div></div>
-            </div>
-          </div>
-
-          <div class="plan-card" data-category="position" data-searchable>
-            <div class="plan-header">
-              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                <span class="badge badge-gray">位置专项</span>
-                <span class="badge badge-gray">6周</span>
-              </div>
-              <div class="plan-title">🎮 控球后卫专项训练</div>
-              <div class="plan-meta">
-                <span>⏱ 每次 90 分钟</span>
-                <span>📅 每周 4 次</span>
-                <span>🎯 PG 位置球员</span>
-              </div>
-            </div>
-            <div class="plan-body">
-              <div class="day-row"><div class="day-label">运球</div><div class="day-content">全套高阶变向运球（胯下/背后/转身组合）+ 限速区低头运球训练</div></div>
-              <div class="day-row"><div class="day-label">传球</div><div class="day-content">无看传球 + 突破分球 + 挡拆后的传球选择训练</div></div>
-              <div class="day-row"><div class="day-label">得分</div><div class="day-content">挡拆后弹跳投篮 + 中远距离急停跳投 + 欧洲步上篮</div></div>
-              <div class="day-row"><div class="day-label">战术</div><div class="day-content">组织进攻节奏控制 + 全队快攻发动 + 末节比赛管理能力</div></div>
-            </div>
-          </div>
-
-          <div class="plan-card" data-category="position" data-searchable>
-            <div class="plan-header">
-              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                <span class="badge badge-gray">位置专项</span>
-                <span class="badge badge-gray">6周</span>
-              </div>
-              <div class="plan-title">🗼 中锋专项训练</div>
-              <div class="plan-meta">
-                <span>⏱ 每次 90 分钟</span>
-                <span>📅 每周 4 次</span>
-                <span>🎯 C / PF 位置球员</span>
-              </div>
-            </div>
-            <div class="plan-body">
-              <div class="day-row"><div class="day-label">低位</div><div class="day-content">低位单打技术（背身勾手、转身强攻）+ 脚步步法梦幻步练习</div></div>
-              <div class="day-row"><div class="day-label">篮板</div><div class="day-content">Box Out 卡位技术 + 进攻篮板二次进攻 + 高点抢球爆发力</div></div>
-              <div class="day-row"><div class="day-label">防守</div><div class="day-content">封盖时机判断 + 协防补防站位 + 拆挡还原防守移动</div></div>
-              <div class="day-row"><div class="day-label">策应</div><div class="day-content">高位掩护技术 + 挡拆后的滚动与弹出选择 + 短传配合</div></div>
-            </div>
-          </div>
-
-          <div class="plan-card" data-category="beginner" data-searchable>
-            <div class="plan-header">
-              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                <span class="badge badge-green">新手入门</span>
-                <span class="badge badge-gray">2周</span>
-              </div>
-              <div class="plan-title">💪 投篮专项提升计划</div>
-              <div class="plan-meta">
-                <span>⏱ 每次 45 分钟</span>
-                <span>📅 每天</span>
-                <span>🎯 改善投篮命中率</span>
-              </div>
-            </div>
-            <div class="plan-body">
-              <div class="day-row"><div class="day-label">每日</div><div class="day-content">200次定点投篮（5个点各40次：底角、45°、弧顶），重心感受慢速练习</div></div>
-              <div class="day-row"><div class="day-label">隔天</div><div class="day-content">接球即投练习（有人传球）+ 运球急停跳投 + 三分线外定点尝试</div></div>
-              <div class="day-row"><div class="day-label">记录</div><div class="day-content">每次训练记录各点命中率，对比进步曲线，找到自己的强弱点</div></div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Weekly template -->
-        <div class="week-schedule fade-in">
-          <div class="ws-header">
-            <span style="font-size:1.4rem;">📅</span>
-            <h3>通用周训练模板（进阶级别参考）</h3>
-          </div>
-          <div class="ws-body">
-            <div class="ws-row">
-              <div class="ws-day">周一</div>
-              <div class="ws-content">
-                <strong>投篮 + 运球技术日</strong><br/>
-                热身 10min → 运球技术组合 20min → 定点跳投 200次 → 拉伸 10min
-                <div class="intensity-bar int-mid"></div>
-              </div>
-            </div>
-            <div class="ws-row">
-              <div class="ws-day">周二</div>
-              <div class="ws-content">
-                <strong>体能 + 防守日</strong><br/>
-                热身 10min → 折返跑 4组 → 滑步防守训练 25min → 核心力量 15min
-                <div class="intensity-bar int-high"></div>
-              </div>
-            </div>
-            <div class="ws-row">
-              <div class="ws-day">周三</div>
-              <div class="ws-content">
-                <strong>主动恢复日</strong><br/>
-                瑜伽或轻度拉伸 30min，低强度原地运球，关注身体恢复状态
-                <div class="intensity-bar int-rest"></div>
-              </div>
-            </div>
-            <div class="ws-row">
-              <div class="ws-day">周四</div>
-              <div class="ws-content">
-                <strong>技术对抗日</strong><br/>
-                热身 10min → 1对1对抗训练 30min → 挡拆配合演练 20min → 拉伸
-                <div class="intensity-bar int-high"></div>
-              </div>
-            </div>
-            <div class="ws-row">
-              <div class="ws-day">周五</div>
-              <div class="ws-content">
-                <strong>投篮专项日</strong><br/>
-                热身 10min → 三分专项训练 30min → 中距离急停跳投 → 罚球 50次
-                <div class="intensity-bar int-mid"></div>
-              </div>
-            </div>
-            <div class="ws-row">
-              <div class="ws-day">周六</div>
-              <div class="ws-content">
-                <strong>全场比赛日</strong><br/>
-                正式5对5全场比赛，专注将本周练习的技术运用到实战中，赛后复盘
-                <div class="intensity-bar int-high"></div>
-              </div>
-            </div>
-            <div class="ws-row">
-              <div class="ws-day">周日</div>
-              <div class="ws-content">
-                <strong>完全休息日</strong><br/>
-                充分休息，保证睡眠质量，为下周训练储备体力
-                <div class="intensity-bar int-rest"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:40px;" class="fade-in">
-          <div class="highlight-box">
-            <div class="hb-title">⚠️ 训练注意事项</div>
-            <p>
-              <strong>1. 循序渐进：</strong>不要急于求成，技术动作的质量比完成数量更重要。<br/>
-              <strong>2. 充分热身：</strong>每次训练前必须热身，特别是踝关节和膝关节的活动。<br/>
-              <strong>3. 记录进步：</strong>建议记录训练日志，追踪命中率、完成组数等数据，客观评估进步。<br/>
-              <strong>4. 保证恢复：</strong>肌肉在休息中生长，不要连续高强度训练超过3天。
-            </p>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-bottom">
-          <p>© 2025 篮球训练营</p>
-          <div style="display:flex;gap:20px;">
-            <a href="index.html" style="font-size:0.85rem;color:var(--text-muted);">首页</a>
-            <a href="drills.html" style="font-size:0.85rem;color:var(--text-muted);">训练动作</a>
-            <a href="tactics.html" style="font-size:0.85rem;color:var(--text-muted);">战术板</a>
-            <a href="knowledge.html" style="font-size:0.85rem;color:var(--text-muted);">知识库</a>
-          </div>
-        </div>
-      </div>
-    </footer>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">首页</a>
+    <a href="drills.html">训练动作</a>
+    <a href="plans.html" class="active">训练计划</a>
+    <a href="tactics.html">战术板</a>
+    <a href="knowledge.html">知识库</a>
   </div>
+  <button class="nav-toggle" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-  <div class="back-to-top">↑</div>
-  <script src="js/main.js"></script>
+<div class="page-header">
+  <h1>训练 <span>计划</span></h1>
+  <p>科学系统的训练方案，从入门基础到专业进阶，帮助你循序渐进地提升篮球实力</p>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Plan Level Tabs -->
+    <div class="plan-tabs">
+      <button class="plan-tab active" onclick="switchPlan('beginner', this)">🌱 新手入门计划</button>
+      <button class="plan-tab" onclick="switchPlan('intermediate', this)">🔥 进阶突破计划</button>
+      <button class="plan-tab" onclick="switchPlan('advanced', this)">⚡ 专业冲刺计划</button>
+      <button class="plan-tab" onclick="switchPlan('shooting', this)">🎯 投篮专项计划</button>
+    </div>
+
+    <!-- Beginner Plan -->
+    <div id="plan-beginner" class="plan-section active">
+      <div class="plan-overview">
+        <div class="overview-box">
+          <h4>📋 计划概览</h4>
+          <div class="overview-stat"><span class="label">适合人群</span><span class="value">零基础至入门</span></div>
+          <div class="overview-stat"><span class="label">计划周期</span><span class="value">4周 / 28天</span></div>
+          <div class="overview-stat"><span class="label">每周训练</span><span class="value">5天 休息2天</span></div>
+          <div class="overview-stat"><span class="label">每日时长</span><span class="value">45-60分钟</span></div>
+          <div class="overview-stat"><span class="label">核心目标</span><span class="value">建立基础运球与投篮</span></div>
+        </div>
+        <div class="overview-box">
+          <h4>🎯 训练目标</h4>
+          <div class="overview-stat"><span class="label">运球控制</span><span class="value badge badge-success">基础稳定</span></div>
+          <div class="overview-stat"><span class="label">上篮命中率</span><span class="value badge badge-success">目标 70%+</span></div>
+          <div class="overview-stat"><span class="label">罚球命中率</span><span class="value badge badge-info">目标 60%+</span></div>
+          <div class="overview-stat"><span class="label">防守姿势</span><span class="value badge badge-success">低重心 稳定</span></div>
+          <div class="overview-stat"><span class="label">体能基础</span><span class="value badge badge-primary">全场 30分钟</span></div>
+        </div>
+      </div>
+
+      <!-- Week 1 -->
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div>
+          <h3>第一周 — 基础热身与适应</h3>
+          <p>重点：熟悉球感，建立基础运球习惯与投篮手型</p>
+        </div>
+      </div>
+
+      <div class="day-card animate-in">
+        <div class="day-header">
+          <span class="day-title">🗓️ 周一 — 球感建立</span>
+          <div><span class="badge badge-success">基础</span> <span style="font-size:0.8rem;color:var(--text-muted);">45分钟</span></div>
+        </div>
+        <div class="workout-list">
+          <div class="workout-item"><span class="workout-icon">🔥</span><div class="workout-text"><strong>热身慢跑</strong> 绕场2圈，活动各关节</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🏀</span><div class="workout-text"><strong>原地拍球</strong> 双手交替，感受球的弹性与节奏</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🚶</span><div class="workout-text"><strong>行进间运球</strong> 步行速度，直线运球来回，专注控球</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🎯</span><div class="workout-text"><strong>近距离上篮</strong> 从油漆区两侧练习上篮，左右手各30次</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🧘</span><div class="workout-text"><strong>拉伸放松</strong> 重点拉伸腿部、腰部、肩膀</div><span class="workout-duration">5分钟</span></div>
+        </div>
+      </div>
+
+      <div class="day-card animate-in">
+        <div class="day-header">
+          <span class="day-title">🗓️ 周二 — 投篮手型与发力</span>
+          <div><span class="badge badge-success">投篮</span> <span style="font-size:0.8rem;color:var(--text-muted);">50分钟</span></div>
+        </div>
+        <div class="workout-list">
+          <div class="workout-item"><span class="workout-icon">🔥</span><div class="workout-text"><strong>热身</strong> 跳绳100次 + 动态拉伸</div><span class="workout-duration">8分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">📐</span><div class="workout-text"><strong>投篮手型练习</strong> 坐姿单手向上抛球，训练手指和手腕发力</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🎯</span><div class="workout-text"><strong>一米超近距离投篮</strong> 站在篮板正下方，轻柔出手板进</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🎯</span><div class="workout-text"><strong>罚球线投篮</strong> 每组10球，共4组，关注BEEF技术要点</div><span class="workout-duration">15分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🧘</span><div class="workout-text"><strong>冷身放松</strong></div><span class="workout-duration">7分钟</span></div>
+        </div>
+      </div>
+
+      <div class="day-card animate-in">
+        <div class="day-header">
+          <span class="day-title">🗓️ 周三 — 防守入门</span>
+          <div><span class="badge badge-info">防守</span> <span style="font-size:0.8rem;color:var(--text-muted);">45分钟</span></div>
+        </div>
+        <div class="workout-list">
+          <div class="workout-item"><span class="workout-icon">🔥</span><div class="workout-text"><strong>热身</strong> 慢跑 + 高抬腿 + 侧向跨步</div><span class="workout-duration">8分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🛡️</span><div class="workout-text"><strong>防守站姿</strong> 低重心防守姿势，保持30秒 × 5组</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">↔️</span><div class="workout-text"><strong>滑步练习</strong> 罚球线至三分线来回，侧向滑步×10往返</div><span class="workout-duration">12分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🤝</span><div class="workout-text"><strong>1对1无球防守</strong> 跟随无球进攻方运动，保持防守位置</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🧘</span><div class="workout-text"><strong>放松</strong></div><span class="workout-duration">5分钟</span></div>
+        </div>
+      </div>
+
+      <div class="rest-day animate-in">
+        <div class="rest-icon">😴</div>
+        <div style="font-weight:700;margin-bottom:0.25rem;">周四 — 主动恢复日</div>
+        <p>建议：轻度有氧（散步30分钟）、泡沫轴放松、充足睡眠</p>
+      </div>
+
+      <div class="day-card animate-in">
+        <div class="day-header">
+          <span class="day-title">🗓️ 周五 — 综合基础训练</span>
+          <div><span class="badge badge-primary">综合</span> <span style="font-size:0.8rem;color:var(--text-muted);">60分钟</span></div>
+        </div>
+        <div class="workout-list">
+          <div class="workout-item"><span class="workout-icon">🔥</span><div class="workout-text"><strong>热身</strong> 跳绳150次 + 全身动态拉伸</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🏀</span><div class="workout-text"><strong>体前变向运球</strong> 沿中线来回，左右变向×15次</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🎯</span><div class="workout-text"><strong>三步上篮</strong> 从45度角切入上篮，左右手各20次</div><span class="workout-duration">15分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🛡️</span><div class="workout-text"><strong>1对1实战演练</strong> 进攻防守各5次，专注技术执行</div><span class="workout-duration">15分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🧘</span><div class="workout-text"><strong>放松拉伸</strong></div><span class="workout-duration">10分钟</span></div>
+        </div>
+      </div>
+
+      <!-- Week 2-4 Summary -->
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div>
+          <h3>第二周 — 技术强化</h3>
+          <p>在第一周基础上增加强度，引入背后运球和急停技术</p>
+        </div>
+      </div>
+
+      <div class="tip-box animate-in">
+        <strong>第二周重点：</strong>在球感稳定的基础上，开始练习背后运球和胯下运球变向。投篮训练升级到中距离（肘部位置），每次训练增加10分钟强度。
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div>
+          <h3>第三周 — 实战连接</h3>
+          <p>将单项技术整合，进行更多2对2、3对3小场地实战</p>
+        </div>
+      </div>
+
+      <div class="tip-box animate-in">
+        <strong>第三周重点：</strong>加入挡拆配合练习，从个人技术过渡到团队配合。防守端开始练习协防和轮转。每次练习前5分钟进行专项热身，激活目标肌群。
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">4</div>
+        <div>
+          <h3>第四周 — 综合评估</h3>
+          <p>测试与评估，巩固4周成果，规划下阶段训练方向</p>
+        </div>
+      </div>
+
+      <div class="tip-box animate-in">
+        <strong>第四周重点：</strong>每项技术进行量化测试（如上篮20投命中率、罚球10投命中数、防守滑步30秒往返次数），记录数据作为进阶计划的参考基准。
+      </div>
+
+      <!-- Skills Progress -->
+      <div class="progress-overview animate-in" style="margin-top:2rem;">
+        <h4 style="font-weight:700;margin-bottom:1.25rem;">📈 4周预期技术进步</h4>
+        <div class="skill-row">
+          <span class="skill-name">运球控制</span>
+          <div class="skill-bar"><div class="progress-bar"><div class="progress-fill" data-width="65%" style="width:0%"></div></div></div>
+          <span class="skill-target">+65%</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">上篮命中率</span>
+          <div class="skill-bar"><div class="progress-bar"><div class="progress-fill" data-width="70%" style="width:0%"></div></div></div>
+          <span class="skill-target">70%+</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">防守滑步</span>
+          <div class="skill-bar"><div class="progress-bar"><div class="progress-fill" data-width="55%" style="width:0%"></div></div></div>
+          <span class="skill-target">+55%</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">罚球稳定性</span>
+          <div class="skill-bar"><div class="progress-bar"><div class="progress-fill" data-width="60%" style="width:0%"></div></div></div>
+          <span class="skill-target">60%+</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">体能耐力</span>
+          <div class="skill-bar"><div class="progress-bar"><div class="progress-fill" data-width="50%" style="width:0%"></div></div></div>
+          <span class="skill-target">+50%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intermediate Plan -->
+    <div id="plan-intermediate" class="plan-section">
+      <div class="plan-overview">
+        <div class="overview-box">
+          <h4>📋 计划概览</h4>
+          <div class="overview-stat"><span class="label">适合人群</span><span class="value">有一定基础球员</span></div>
+          <div class="overview-stat"><span class="label">计划周期</span><span class="value">6周 / 42天</span></div>
+          <div class="overview-stat"><span class="label">每周训练</span><span class="value">5-6天</span></div>
+          <div class="overview-stat"><span class="label">每日时长</span><span class="value">60-90分钟</span></div>
+          <div class="overview-stat"><span class="label">核心目标</span><span class="value">突破+投篮+防守系统化</span></div>
+        </div>
+        <div class="overview-box">
+          <h4>🎯 训练目标</h4>
+          <div class="overview-stat"><span class="label">中距离命中率</span><span class="value badge badge-info">目标 45%+</span></div>
+          <div class="overview-stat"><span class="label">三分球命中率</span><span class="value badge badge-info">目标 33%+</span></div>
+          <div class="overview-stat"><span class="label">1对1突破成功率</span><span class="value badge badge-success">目标 50%+</span></div>
+          <div class="overview-stat"><span class="label">挡拆配合执行</span><span class="value badge badge-primary">基础熟练</span></div>
+          <div class="overview-stat"><span class="label">全场对抗时长</span><span class="value badge badge-gold">40分钟不掉水平</span></div>
+        </div>
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">A</div>
+        <div>
+          <h3>进阶核心训练日</h3>
+          <p>以高强度、高重复次数的技术训练为主</p>
+        </div>
+      </div>
+
+      <div class="day-card animate-in">
+        <div class="day-header">
+          <span class="day-title">🏀 进攻日（含挡拆）</span>
+          <div><span class="badge badge-primary">进攻</span> <span style="font-size:0.8rem;color:var(--text-muted);">75分钟</span></div>
+        </div>
+        <div class="workout-list">
+          <div class="workout-item"><span class="workout-icon">🔥</span><div class="workout-text"><strong>动态热身</strong> 5分钟慢跑 + 带球移动 + 各方向接球练习</div><span class="workout-duration">12分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🏀</span><div class="workout-text"><strong>变速运球训练</strong> 背后、体前、胯下变向组合，2人1球追逐模式</div><span class="workout-duration">15分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">⚡</span><div class="workout-text"><strong>挡拆配合2对2</strong> 持球人+掩护人 vs 2防守，练习下顺和上提选择</div><span class="workout-duration">20分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🎯</span><div class="workout-text"><strong>接球急停投篮</strong> 从不同位置接球后一拍出手，5个位置×8球</div><span class="workout-duration">18分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🧘</span><div class="workout-text"><strong>放松 + 核心训练</strong> 平板支撑2组 × 60秒</div><span class="workout-duration">10分钟</span></div>
+        </div>
+      </div>
+
+      <div class="day-card animate-in">
+        <div class="day-header">
+          <span class="day-title">🛡️ 防守专项日</span>
+          <div><span class="badge badge-info">防守</span> <span style="font-size:0.8rem;color:var(--text-muted);">70分钟</span></div>
+        </div>
+        <div class="workout-list">
+          <div class="workout-item"><span class="workout-icon">🔥</span><div class="workout-text"><strong>防守专项热身</strong> 滑步热身 + 高强度侧向跑</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🛡️</span><div class="workout-text"><strong>全场一对一防守</strong> 被动防守全场持球人，专注脚步和位置</div><span class="workout-duration">20分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🔄</span><div class="workout-text"><strong>防挡拆实战演练</strong> 绕过掩护 vs 换防，2种防法各练15次</div><span class="workout-duration">20分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">💪</span><div class="workout-text"><strong>防守体能冲刺</strong> 全场冲刺×6 + 侧滑步×6，模拟比赛节奏</div><span class="workout-duration">15分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🧘</span><div class="workout-text"><strong>恢复拉伸</strong></div><span class="workout-duration">5分钟</span></div>
+        </div>
+      </div>
+
+      <div class="info-box animate-in" style="margin-top:1.5rem;">
+        <strong>💡 进阶计划关键原则：</strong> 每3周进行一次"减量周"，训练量降至正常的60%，让身体充分恢复适应。避免持续高强度造成积累性疲劳和运动伤害。
+      </div>
+    </div>
+
+    <!-- Advanced Plan -->
+    <div id="plan-advanced" class="plan-section">
+      <div class="plan-overview">
+        <div class="overview-box">
+          <h4>📋 计划概览</h4>
+          <div class="overview-stat"><span class="label">适合人群</span><span class="value">有较强基础球员</span></div>
+          <div class="overview-stat"><span class="label">计划周期</span><span class="value">8周 / 56天</span></div>
+          <div class="overview-stat"><span class="label">每周训练</span><span class="value">6天 休息1天</span></div>
+          <div class="overview-stat"><span class="label">每日时长</span><span class="value">90-120分钟</span></div>
+          <div class="overview-stat"><span class="label">核心目标</span><span class="value">全面提升冲击高水平赛事</span></div>
+        </div>
+        <div class="overview-box">
+          <h4>🎯 训练目标</h4>
+          <div class="overview-stat"><span class="label">三分球命中率</span><span class="value badge badge-gold">目标 38%+</span></div>
+          <div class="overview-stat"><span class="label">进攻效率</span><span class="value badge badge-gold">TS% 55%+</span></div>
+          <div class="overview-stat"><span class="label">防守评分</span><span class="value badge badge-success">低对手eFG%</span></div>
+          <div class="overview-stat"><span class="label">体能水平</span><span class="value badge badge-primary">全场5对5不降速</span></div>
+          <div class="overview-stat"><span class="label">球队配合</span><span class="value badge badge-info">高级战术执行</span></div>
+        </div>
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div>
+          <h3>第1-2周 — 力量与爆发力基础</h3>
+          <p>结合力量训练与球场技术，提升身体对抗能力</p>
+        </div>
+      </div>
+
+      <div class="day-card animate-in">
+        <div class="day-header">
+          <span class="day-title">💪 力量+球技双修日</span>
+          <div><span class="badge badge-gold">专业</span> <span style="font-size:0.8rem;color:var(--text-muted);">110分钟</span></div>
+        </div>
+        <div class="workout-list">
+          <div class="workout-item"><span class="workout-icon">🔥</span><div class="workout-text"><strong>全身动态热身</strong> 泡沫轴放松 + 激活训练 + 动态拉伸</div><span class="workout-duration">15分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">💪</span><div class="workout-text"><strong>力量训练</strong> 深蹲3×8、箱跳3×6、卧推3×10、核心反旋转练习</div><span class="workout-duration">30分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🏀</span><div class="workout-text"><strong>爆发力运球</strong> 全速变向组合、双球训练、背身单打</div><span class="workout-duration">25分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🎯</span><div class="workout-text"><strong>高难度投篮</strong> 移动中接球投、后仰跳投、干扰下出手</div><span class="workout-duration">25分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🧘</span><div class="workout-text"><strong>全身放松</strong> 拉伸 + 冷身有氧</div><span class="workout-duration">15分钟</span></div>
+        </div>
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div>
+          <h3>第3-5周 — 技术精进与实战</h3>
+          <p>高强度5对5实战结合高阶技术训练</p>
+        </div>
+      </div>
+
+      <div class="tip-box animate-in">
+        <strong>核心训练内容：</strong>全场5对5对抗（60分钟）+ 赛后针对性技术改进（30分钟）。重点改善比赛中暴露的技术弱点，观看录像进行自我分析。
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div>
+          <h3>第6-8周 — 赛前冲刺</h3>
+          <p>模拟比赛环境，调整心理状态，达到竞技巅峰</p>
+        </div>
+      </div>
+
+      <div class="tip-box animate-in">
+        <strong>冲刺阶段重点：</strong>最后2周适当减少训练量（降至75%），专注于模拟对手分析和战术演练。保证充足睡眠（8小时以上），优化营养摄入，维持最佳竞技状态。
+      </div>
+    </div>
+
+    <!-- Shooting Specialist Plan -->
+    <div id="plan-shooting" class="plan-section">
+      <div class="plan-overview">
+        <div class="overview-box">
+          <h4>📋 计划概览</h4>
+          <div class="overview-stat"><span class="label">适合人群</span><span class="value">所有投篮爱好者</span></div>
+          <div class="overview-stat"><span class="label">计划周期</span><span class="value">4周 专项提升</span></div>
+          <div class="overview-stat"><span class="label">每周投篮量</span><span class="value">500+ 出手</span></div>
+          <div class="overview-stat"><span class="label">覆盖区域</span><span class="value">全场11个得分位置</span></div>
+          <div class="overview-stat"><span class="label">核心目标</span><span class="value">建立稳定的射手技术</span></div>
+        </div>
+        <div class="overview-box">
+          <h4>🎯 投篮目标</h4>
+          <div class="overview-stat"><span class="label">罚球</span><span class="value badge badge-gold">80%+ 命中率</span></div>
+          <div class="overview-stat"><span class="label">中距离</span><span class="value badge badge-info">50%+ 命中率</span></div>
+          <div class="overview-stat"><span class="label">三分球</span><span class="value badge badge-primary">35%+ 命中率</span></div>
+          <div class="overview-stat"><span class="label">移动投篮</span><span class="value badge badge-success">45%+ 命中率</span></div>
+          <div class="overview-stat"><span class="label">接球即投</span><span class="value badge badge-success">40%+ 命中率</span></div>
+        </div>
+      </div>
+
+      <div class="phase-header">
+        <div class="phase-num">★</div>
+        <div>
+          <h3>每日标准投篮训练方案</h3>
+          <p>5个区域系统轮转，每区域坚持进5球再移动（"Mikan Drill"变体）</p>
+        </div>
+      </div>
+
+      <div class="day-card animate-in">
+        <div class="day-header">
+          <span class="day-title">🎯 标准投篮训练日</span>
+          <div><span class="badge badge-gold">投篮专项</span> <span style="font-size:0.8rem;color:var(--text-muted);">60分钟</span></div>
+        </div>
+        <div class="workout-list">
+          <div class="workout-item"><span class="workout-icon">🎯</span><div class="workout-text"><strong>上篮热身</strong> 两侧45度各50次板进上篮，左右手轮换</div><span class="workout-duration">10分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">📐</span><div class="workout-text"><strong>中距离定点</strong> 油漆区两肘、45度各位置定点投篮，每点5球</div><span class="workout-duration">15分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🏃</span><div class="workout-text"><strong>接球出手</strong> 搭档传球、自抛接球出手，模拟比赛接球节奏</div><span class="workout-duration">12分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🌐</span><div class="workout-text"><strong>三分线环形练习</strong> 5个位置顺序轮转，每位置投3球然后移动</div><span class="workout-duration">15分钟</span></div>
+          <div class="workout-item"><span class="workout-icon">🏆</span><div class="workout-text"><strong>挑战赛结束</strong> "21分赛"：移动中投篮，进一球得1分，罚球得2分</div><span class="workout-duration">8分钟</span></div>
+        </div>
+      </div>
+
+      <div class="info-box animate-in" style="margin-top:1.5rem;">
+        <strong>💡 投篮训练黄金法则：</strong>质量优先于数量。100次精心练习好过1000次随意出手。每次投篮前要有完整的例行准备动作（站位、瞄准、呼吸），投篮后关注手感与弧度，及时调整。
+      </div>
+
+      <div class="progress-overview animate-in" style="margin-top:1.5rem;">
+        <h4 style="font-weight:700;margin-bottom:1.25rem;">📊 4周投篮进步追踪</h4>
+        <div class="skill-row">
+          <span class="skill-name">罚球命中率</span>
+          <div class="skill-bar"><div class="progress-bar"><div class="progress-fill" data-width="80%" style="width:0%"></div></div></div>
+          <span class="skill-target">80%</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">中距离命中率</span>
+          <div class="skill-bar"><div class="progress-bar"><div class="progress-fill" data-width="50%" style="width:0%"></div></div></div>
+          <span class="skill-target">50%</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">三分命中率</span>
+          <div class="skill-bar"><div class="progress-bar"><div class="progress-fill" data-width="35%" style="width:0%"></div></div></div>
+          <span class="skill-target">35%</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">接球即投效率</span>
+          <div class="skill-bar"><div class="progress-bar"><div class="progress-fill" data-width="40%" style="width:0%"></div></div></div>
+          <span class="skill-target">40%</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">出手速度改善</span>
+          <div class="skill-bar"><div class="progress-bar"><div class="progress-fill" data-width="60%" style="width:0%"></div></div></div>
+          <span class="skill-target">-20%时间</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:1rem;">
+          <div class="logo-icon">🏀</div>
+          <div class="logo-text">
+            <span class="site-name">篮球训练营</span>
+            <span class="site-sub">BASKETBALL ACADEMY</span>
+          </div>
+        </a>
+        <p>科学系统的训练方案，帮助每位球员实现进步。</p>
+      </div>
+      <div class="footer-col">
+        <h4>训练计划</h4>
+        <ul>
+          <li><a href="#">新手入门计划</a></li>
+          <li><a href="#">进阶突破计划</a></li>
+          <li><a href="#">专业冲刺计划</a></li>
+          <li><a href="#">投篮专项计划</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>快速导航</h4>
+        <ul>
+          <li><a href="index.html">首页</a></li>
+          <li><a href="drills.html">训练动作</a></li>
+          <li><a href="tactics.html">战术板</a></li>
+          <li><a href="knowledge.html">知识库</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>训练资源</h4>
+        <ul>
+          <li><a href="drills.html">进攻技术</a></li>
+          <li><a href="drills.html">防守技术</a></li>
+          <li><a href="knowledge.html">体能训练</a></li>
+          <li><a href="knowledge.html">营养建议</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 <span>篮球训练营</span> · 热爱篮球，专注进步 🏀
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+function switchPlan(id, btn) {
+  document.querySelectorAll('.plan-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.plan-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('plan-' + id).classList.add('active');
+  btn.classList.add('active');
+  // Re-trigger animations
+  document.querySelectorAll('#plan-' + id + ' .animate-in').forEach(el => {
+    el.classList.remove('visible');
+    setTimeout(() => el.classList.add('visible'), 50);
+  });
+  // Re-trigger progress bars
+  document.querySelectorAll('#plan-' + id + ' .progress-fill').forEach(bar => {
+    bar.style.width = '0%';
+    setTimeout(() => { bar.style.width = bar.dataset.width; }, 300);
+  });
+}
+</script>
 </body>
 </html>
