@@ -1,189 +1,757 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>知识库 · 篮球训练营</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>知识库 — 篮球训练营</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .knowledge-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .knowledge-sidebar {
+      position: sticky;
+      top: 80px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .kb-sidebar-title {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+    }
+
+    .kb-cat-list { padding: 0.5rem; }
+    .kb-cat-item {
+      display: flex; align-items: center; gap: 0.7rem;
+      padding: 0.7rem 0.75rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .kb-cat-item:hover { background: rgba(255,107,0,0.08); color: var(--primary); }
+    .kb-cat-item.active { background: rgba(255,107,0,0.12); color: var(--primary); font-weight: 600; }
+    .kb-cat-item .cat-count { margin-left: auto; font-size: 0.72rem; background: var(--border); padding: 2px 7px; border-radius: 10px; }
+
+    .kb-search-wrap {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .kb-search {
+      display: flex; align-items: center;
+      background: var(--bg-dark); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 8px 12px; gap: 6px;
+    }
+    .kb-search:focus-within { border-color: var(--primary); }
+    .kb-search input { background: none; border: none; outline: none; color: var(--text-primary); font-size: 0.85rem; flex: 1; }
+    .kb-search input::placeholder { color: var(--text-muted); }
+
+    /* Article card */
+    .article-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+      margin-bottom: 1.5rem;
+    }
+    .article-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+
+    .article-header {
+      padding: 1.5rem 1.5rem 0;
+    }
+
+    .article-meta {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 0.75rem; flex-wrap: wrap;
+    }
+
+    .article-cat {
+      font-size: 0.75rem; font-weight: 700; color: var(--primary);
+      background: rgba(255,107,0,0.1); padding: 3px 10px; border-radius: 20px;
+    }
+
+    .article-read-time { font-size: 0.78rem; color: var(--text-muted); }
+
+    .article-header h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .article-header p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.75; }
+
+    .article-body { padding: 0 1.5rem 1.5rem; }
+
+    .article-section { margin-top: 1.25rem; }
+    .article-section h4 { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 0.6rem; }
+    .article-section p { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.8; }
+
+    .article-list {
+      display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;
+    }
+    .article-list-item {
+      display: flex; gap: 0.6rem; align-items: flex-start;
+      font-size: 0.86rem; color: var(--text-secondary);
+    }
+    .article-list-item::before { content: '▶'; color: var(--primary); font-size: 0.65rem; margin-top: 3px; flex-shrink: 0; }
+
+    .article-footer {
+      padding: 0.75rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.5rem;
+    }
+
+    .article-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .art-tag {
+      font-size: 0.73rem; padding: 2px 9px;
+      border-radius: 12px; border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .expand-btn {
+      font-size: 0.82rem; color: var(--primary); font-weight: 600;
+      background: none; border: none; cursor: pointer; padding: 0;
+      transition: var(--transition);
+    }
+    .expand-btn:hover { opacity: 0.8; }
+
+    .article-extra {
+      display: none;
+      padding: 0 1.5rem 1.5rem;
+    }
+    .article-extra.open { display: block; }
+
+    /* Rule cards */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .rule-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: var(--transition);
+    }
+    .rule-card:hover { border-color: var(--primary); }
+    .rule-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .rule-card p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; }
+
+    /* Quick tip cards */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .quick-tip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .quick-tip .tip-icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+    .quick-tip h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .quick-tip p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; }
+
+    @media (max-width: 900px) {
+      .knowledge-layout { grid-template-columns: 1fr; }
+      .knowledge-sidebar { position: static; }
+    }
+    @media (max-width: 640px) {
+      .rules-grid { grid-template-columns: 1fr; }
+      .tips-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="navbar-inner">
-      <a href="index.html" class="navbar-logo">
-        <div class="ball-icon">🏀</div>
-        <span>篮球<span class="brand-text">训练营</span></span>
-      </a>
-      <div class="hamburger"><span></span><span></span><span></span></div>
-      <ul class="navbar-nav">
-        <li><a href="index.html">首页</a></li>
-        <li><a href="drills.html">训练动作</a></li>
-        <li><a href="plans.html">训练计划</a></li>
-        <li><a href="tactics.html">战术板</a></li>
-        <li><a href="knowledge.html">知识库</a></li>
-        <li><a href="my-training.html">我的训练</a></li>
-      </ul>
-      <a href="my-training.html" class="navbar-cta">我的训练 ✚</a>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">🏀</div>
+    <div class="logo-text">
+      <span class="site-name">篮球训练营</span>
+      <span class="site-sub">BASKETBALL ACADEMY</span>
     </div>
-  </nav>
-
-  <div class="page-wrapper">
-    <div class="page-hero">
-      <div class="container">
-        <div class="breadcrumb"><a href="index.html">首页</a><span class="sep">/</span><span>知识库</span></div>
-        <h1>📚 篮球<span class="highlight">知识库</span></h1>
-        <p>比赛规则、运动科学、身体素质、伤病预防……打好篮球必须了解的理论基础。</p>
-      </div>
-    </div>
-
-    <section class="section">
-      <div class="container">
-        <div class="search-bar">
-          <span class="search-icon">🔍</span>
-          <input id="knowledge-search" type="text" placeholder="搜索知识内容……" />
-        </div>
-
-        <div class="filter-tabs">
-          <button class="filter-tab active" data-filter="all" data-target="#knowledge-grid">全部</button>
-          <button class="filter-tab" data-filter="rules" data-target="#knowledge-grid">比赛规则</button>
-          <button class="filter-tab" data-filter="science" data-target="#knowledge-grid">运动科学</button>
-          <button class="filter-tab" data-filter="injury" data-target="#knowledge-grid">伤病预防</button>
-          <button class="filter-tab" data-filter="history" data-target="#knowledge-grid">篮球历史</button>
-          <button class="filter-tab" data-filter="mindset" data-target="#knowledge-grid">心理与意识</button>
-        </div>
-
-        <div class="card-grid" id="knowledge-grid">
-
-          <div class="knowledge-card" data-category="rules" data-searchable>
-            <div class="k-icon">📋</div>
-            <div class="k-title">24秒违例规则详解</div>
-            <p class="k-text">进攻方必须在24秒内完成出手，否则判为违例交换球权。计时器在以下情况重置：投篮触及篮圈（重置为14秒）、对方犯规给予罚球、球从界外发球时。了解24秒规则有助于合理安排进攻节奏，特别是在关键时刻的战术操作。</p>
-            <div style="margin-top:12px;"><span class="badge badge-primary">规则</span></div>
-          </div>
-
-          <div class="knowledge-card" data-category="rules" data-searchable>
-            <div class="k-icon">🚶</div>
-            <div class="k-title">走步违例（Traveling）判定标准</div>
-            <p class="k-text">球员持球时在未运球情况下移动双脚超过允许步数即为走步。NBA规则中允许「收球步」（gather step），即开始运球动作时收球的那步不计入步数，之后可以再迈两步。欧洲步、三步上篮等技术正是基于这一规则设计的。</p>
-            <div style="margin-top:12px;"><span class="badge badge-primary">规则</span></div>
-          </div>
-
-          <div class="knowledge-card" data-category="rules" data-searchable>
-            <div class="k-icon">👊</div>
-            <div class="k-title">犯规类型：技术犯规 vs 违体犯规</div>
-            <p class="k-text"><strong>技术犯规：</strong>不文明行为、争议裁判判决、延误比赛等，罚一球并获球权。<strong>违体犯规：</strong>以阻止对手推进为目的的故意犯规（通常在快攻中），对方罚两球并获球权。<strong>取消资格犯规：</strong>严重不当行为，直接驱逐出场。</p>
-            <div style="margin-top:12px;"><span class="badge badge-primary">规则</span></div>
-          </div>
-
-          <div class="knowledge-card" data-category="science" data-searchable>
-            <div class="k-icon">💪</div>
-            <div class="k-title">篮球运动员的能量系统</div>
-            <p class="k-text">篮球比赛主要依赖<strong>磷酸肌酸系统</strong>（短时爆发，0~10秒）和<strong>糖酵解系统</strong>（中强度持续，10~90秒），有氧系统负责比赛间歇期的恢复。训练应兼顾三种能量系统：冲刺训练提升磷酸肌酸容量，间歇训练增强糖酵解能力，长时有氧加速恢复效率。</p>
-            <div style="margin-top:12px;"><span class="badge badge-blue">科学</span></div>
-          </div>
-
-          <div class="knowledge-card" data-category="science" data-searchable>
-            <div class="k-icon">🧠</div>
-            <div class="k-title">肌肉记忆与技术动作的形成</div>
-            <p class="k-text">技术动作的自动化需要通过<strong>有意识的刻意练习</strong>来建立神经回路。科学研究表明，一个动作需要正确重复约300~500次才开始形成肌肉记忆，错误重复同样会固化错误动作。因此「慢速练习正确手型」比「快速重复错误动作」更有价值。</p>
-            <div style="margin-top:12px;"><span class="badge badge-blue">科学</span></div>
-          </div>
-
-          <div class="knowledge-card" data-category="science" data-searchable>
-            <div class="k-icon">😴</div>
-            <div class="k-title">睡眠与运动表现的关系</div>
-            <p class="k-text">斯坦福大学对篮球运动员的研究显示，每晚睡眠从7小时增加到10小时后，球员的冲刺速度提升9%、罚球命中率提升9%、三分球命中率提升9.2%。深度睡眠期间生长激素大量分泌，是肌肉修复和技术巩固的关键时段。优质睡眠是最廉价的训练工具。</p>
-            <div style="margin-top:12px;"><span class="badge badge-blue">科学</span></div>
-          </div>
-
-          <div class="knowledge-card" data-category="injury" data-searchable>
-            <div class="k-icon">🦵</div>
-            <div class="k-title">踝关节扭伤的预防与处理</div>
-            <p class="k-text">踝关节扭伤是篮球最常见伤病。<strong>预防：</strong>每次训练前进行踝关节绕环活动、单脚平衡训练强化稳定肌群、选择支撑性好的篮球鞋。<strong>急性处理（RICE原则）：</strong>Rest（休息）→ Ice（冰敷20分钟，每2小时一次）→ Compression（加压包扎）→ Elevation（抬高患肢）。48小时后改为热敷促进恢复。</p>
-            <div style="margin-top:12px;"><span class="badge badge-red">伤病</span></div>
-          </div>
-
-          <div class="knowledge-card" data-category="injury" data-searchable>
-            <div class="k-icon">🦴</div>
-            <div class="k-title">膝关节保护：跳跃着陆技术</div>
-            <p class="k-text">错误的着陆技术（膝盖内扣、着地时膝盖过伸）是前交叉韧带（ACL）撕裂的主要原因，尤以女性球员高发。正确着陆技术：<strong>双脚同时落地、膝盖微弯朝脚尖方向、髋部下沉吸收冲击、避免膝盖内扣</strong>。建议将落地技术的专项训练纳入日常热身。</p>
-            <div style="margin-top:12px;"><span class="badge badge-red">伤病</span></div>
-          </div>
-
-          <div class="knowledge-card" data-category="history" data-searchable>
-            <div class="k-icon">🏛️</div>
-            <div class="k-title">篮球运动的起源</div>
-            <p class="k-text">1891年12月，加拿大体育教师<strong>詹姆斯·奈史密斯</strong>在美国麻省春田学院发明篮球。他用13条规则和两个桃篮创造了这项运动，最初每次投篮后需要人工取球。1892年，奈史密斯将规则公开发表，篮球迅速在美国各地传播。1936年柏林奥运会，篮球成为正式奥运项目。</p>
-            <div style="margin-top:12px;"><span class="badge badge-gray">历史</span></div>
-          </div>
-
-          <div class="knowledge-card" data-category="history" data-searchable>
-            <div class="k-icon">👑</div>
-            <div class="k-title">NBA历史上最具影响力的球员</div>
-            <p class="k-text"><strong>比尔·拉塞尔</strong>（11次总冠军）奠定防守与团队篮球基础；<strong>威尔特·张伯伦</strong>创下单场100分等多项至今未被打破的纪录；<strong>迈克尔·乔丹</strong>将篮球推向全球化；<strong>勒布朗·詹姆斯</strong>以全能型打法重新定义现代篮球；<strong>史蒂芬·库里</strong>革命性地改变了三分球的战术价值。</p>
-            <div style="margin-top:12px;"><span class="badge badge-gray">历史</span></div>
-          </div>
-
-          <div class="knowledge-card" data-category="mindset" data-searchable>
-            <div class="k-icon">🎯</div>
-            <div class="k-title">比赛心理：如何处理失误</div>
-            <p class="k-text">顶级球员与普通球员的区别之一是<strong>失误后的心理恢复速度</strong>。科比曾说："失误是训练的反馈，不是失败的定义。"建议：失误后给自己3秒时间「承认→放下→专注下一球」，不要在场上陷入自我否定的思维循环。研究表明，快速重新专注的球员全场失误率更低。</p>
-            <div style="margin-top:12px;"><span class="badge badge-green">心理</span></div>
-          </div>
-
-          <div class="knowledge-card" data-category="mindset" data-searchable>
-            <div class="k-icon">👁️</div>
-            <div class="k-title">篮球智商（IQ）的核心要素</div>
-            <p class="k-text">高篮球智商体现在：<strong>1. 场上阅读能力</strong>——预判比反应更重要；<strong>2. 无球时的跑位</strong>——好球员总是在正确位置出现；<strong>3. 知道什么时候不出手</strong>——避免低效进攻；<strong>4. 感知队友与对手的位置</strong>——真正的"全场视野"；<strong>5. 节奏控制</strong>——快慢切换让防守难以适应。看录像是最快提升篮球IQ的方法。</p>
-            <div style="margin-top:12px;"><span class="badge badge-green">心理</span></div>
-          </div>
-
-        </div>
-
-        <!-- Accordion FAQ -->
-        <div style="margin-top:56px;" class="fade-in">
-          <div class="section-header" style="text-align:left; margin-bottom:28px;">
-            <span class="overline">常见问题</span>
-            <h2 style="font-size:1.6rem;">FAQ</h2>
-          </div>
-          <div class="accordion-group">
-            <div class="accordion-item">
-              <button class="accordion-header">每天练习多少小时比较合适？<span class="acc-arrow">▼</span></button>
-              <div class="accordion-body">对于业余爱好者，每天1~1.5小时的专项训练足够，重质量而非数量。高水平竞技球员可以达到每天2~3小时，但必须保证充分的恢复。完全不训练的休息日同样重要——身体在休息中适应和成长。</div>
-            </div>
-            <div class="accordion-item">
-              <button class="accordion-header">先练体能还是先练技术？<span class="acc-arrow">▼</span></button>
-              <div class="accordion-body">两者应该同步进行，但侧重不同阶段。初学者优先打好技术基础（投篮手型、运球控制），避免在没有正确动作模式的情况下进行大量体能训练。当基础技术初步稳定后，加入体能训练会让技术在实战强度下更稳定。简单说：技术基础 → 体能提升 → 技术与体能融合。</div>
-            </div>
-            <div class="accordion-item">
-              <button class="accordion-header">如何快速提升三分球命中率？<span class="acc-arrow">▼</span></button>
-              <div class="accordion-body">三分球提升的关键：<strong>① 先稳固中距离</strong>，三分与中距离是同一投篮机制；<strong>② 每天200次定点投篮</strong>（固定5个点），记录命中率；<strong>③ 专注投篮机制而非命中率</strong>，前期不要在意进多少，只关注手型、弧度、落脚点是否一致；<strong>④ 接球即投练习</strong>，比静止投篮更贴近实战；<strong>⑤ 不要疲劳投篮</strong>，疲劳时的错误动作会形成错误记忆。</div>
-            </div>
-            <div class="accordion-item">
-              <button class="accordion-header">身高不够能打好篮球吗？<span class="acc-arrow">▼</span></button>
-              <div class="accordion-body">完全可以。篮球是技术与团队配合的运动，身高只是众多因素之一。历史上许多矮身材球员（艾佛森、纳什、伊塞亚·托马斯）都取得了极高成就。矮身材球员应专注：速度与敏捷性、运球与传球技术、三分球拉开空间、防守积极性。找到自己的优势，用技术弥补身体条件。</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-bottom">
-          <p>© 2025 篮球训练营</p>
-          <div style="display:flex;gap:20px;">
-            <a href="index.html" style="font-size:0.85rem;color:var(--text-muted);">首页</a>
-            <a href="drills.html" style="font-size:0.85rem;color:var(--text-muted);">训练动作</a>
-            <a href="tactics.html" style="font-size:0.85rem;color:var(--text-muted);">战术板</a>
-            <a href="my-training.html" style="font-size:0.85rem;color:var(--primary);">我的训练 ✚</a>
-          </div>
-        </div>
-      </div>
-    </footer>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">首页</a>
+    <a href="drills.html">训练动作</a>
+    <a href="plans.html">训练计划</a>
+    <a href="tactics.html">战术板</a>
+    <a href="knowledge.html" class="active">知识库</a>
   </div>
+  <button class="nav-toggle" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-  <div class="back-to-top">↑</div>
-  <script src="js/main.js"></script>
+<div class="page-header">
+  <h1>篮球 <span>知识库</span></h1>
+  <p>规则解析、技术原理、体能训练、营养建议与心理训练，全面系统地学习篮球运动知识</p>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="knowledge-layout">
+
+      <!-- Sidebar -->
+      <div class="knowledge-sidebar animate-in">
+        <div class="kb-search-wrap">
+          <div class="kb-search">
+            <span style="font-size:0.85rem;color:var(--text-muted);">🔍</span>
+            <input type="text" id="knowledge-search" placeholder="搜索知识...">
+          </div>
+        </div>
+        <div class="kb-sidebar-title">知识分类</div>
+        <div class="kb-cat-list">
+          <div class="kb-cat-item active" onclick="filterKB(this, 'all')">
+            <span>📚</span> 全部文章 <span class="cat-count">12</span>
+          </div>
+          <div class="kb-cat-item" onclick="filterKB(this, 'rules')">
+            <span>📋</span> 规则解析 <span class="cat-count">3</span>
+          </div>
+          <div class="kb-cat-item" onclick="filterKB(this, 'technique')">
+            <span>🎯</span> 技术原理 <span class="cat-count">3</span>
+          </div>
+          <div class="kb-cat-item" onclick="filterKB(this, 'fitness')">
+            <span>💪</span> 体能训练 <span class="cat-count">2</span>
+          </div>
+          <div class="kb-cat-item" onclick="filterKB(this, 'mental')">
+            <span>🧠</span> 心理训练 <span class="cat-count">2</span>
+          </div>
+          <div class="kb-cat-item" onclick="filterKB(this, 'nutrition')">
+            <span>🥗</span> 营养健康 <span class="cat-count">2</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Articles -->
+      <div class="kb-articles">
+
+        <!-- Article 1: Shooting Mechanics -->
+        <div class="article-card animate-in knowledge-card" data-category="technique">
+          <div class="article-header">
+            <div class="article-meta">
+              <span class="article-cat">🎯 技术原理</span>
+              <span class="article-read-time">⏱ 阅读约6分钟</span>
+            </div>
+            <h3>投篮力学详解：从身体到指尖的能量传递</h3>
+            <p>投篮是篮球最核心的得分技术。掌握正确的力学原理，可以让投篮更高效、更稳定，并有效预防运动伤害。</p>
+          </div>
+          <div class="article-body">
+            <div class="article-section">
+              <h4>BEEF投篮原则</h4>
+              <p>BEEF是经典的投篮技术口诀，代表：<strong style="color:var(--primary);">B</strong>alance（平衡）、<strong style="color:var(--primary);">E</strong>yes（眼睛）、<strong style="color:var(--primary);">E</strong>lbow（肘部）、<strong style="color:var(--primary);">F</strong>ollow-through（跟随动作）。</p>
+            </div>
+            <div class="article-section">
+              <h4>能量传递链</h4>
+              <div class="article-list">
+                <div class="article-list-item">脚部发力：通过脚跟到前脚掌的蹬地动作产生初始动能</div>
+                <div class="article-list-item">膝部传导：膝关节弯曲后快速伸展，将动能向上传递</div>
+                <div class="article-list-item">臀髋发力：核心肌群保持稳定，臀部带动上身上升</div>
+                <div class="article-list-item">肩肘联动：投篮臂肘部对准篮圈，手臂从肘关节向上伸展</div>
+                <div class="article-list-item">手腕出力：手腕向前拨球，给球施加后旋（Backspin）</div>
+                <div class="article-list-item">指尖控制：最终由食指和中指控制球的方向与旋转</div>
+              </div>
+            </div>
+          </div>
+          <div class="article-extra">
+            <div class="article-section">
+              <h4>常见投篮错误与纠正方法</h4>
+              <div class="article-list">
+                <div class="article-list-item"><strong>左右偏移：</strong>通常因肘部外展，将肘部内收对准篮圈可改善</div>
+                <div class="article-list-item"><strong>弧度过低：</strong>出手角度不足45度，增大手腕前拨幅度，提高出手角度</div>
+                <div class="article-list-item"><strong>距离不足：</strong>腿部发力不够，加强蹬地动作，增大腿部屈伸幅度</div>
+                <div class="article-list-item"><strong>旋转不稳：</strong>出手时手掌仍施力，练习单指拨球感受指尖控球</div>
+              </div>
+            </div>
+            <div class="tip-box">
+              <strong>科学投篮角度：</strong>研究表明，入篮角度在45-52度时成功率最高。此角度下篮圈对球的"有效开口"最大。通过更高的出手弧度可以实现这一最佳角度。
+            </div>
+          </div>
+          <div class="article-footer">
+            <div class="article-tags">
+              <span class="art-tag">投篮技术</span>
+              <span class="art-tag">力学原理</span>
+              <span class="art-tag">BEEF</span>
+            </div>
+            <button class="expand-btn" onclick="toggleArticle(this)">展开全文 ↓</button>
+          </div>
+        </div>
+
+        <!-- Article 2: Rules -->
+        <div class="article-card animate-in knowledge-card" data-category="rules">
+          <div class="article-header">
+            <div class="article-meta">
+              <span class="article-cat">📋 规则解析</span>
+              <span class="article-read-time">⏱ 阅读约8分钟</span>
+            </div>
+            <h3>篮球核心规则全解析：常见误判与裁判判罚依据</h3>
+            <p>了解篮球规则不只是裁判的事，球员对规则的深度理解能帮助更好地利用规则创造优势，同时避免不必要的违例和犯规。</p>
+          </div>
+          <div class="article-body">
+            <div class="rules-grid">
+              <div class="rule-card">
+                <div style="font-size:1.5rem;margin-bottom:0.4rem;">🚶</div>
+                <h4>走步违例</h4>
+                <p>持球时移动支撑脚（枢轴脚）。规则允许持球时移动非枢轴脚，但枢轴脚不能离地后再落地（单脚蹦）。接球时可合法使用"跨步急停"确定枢轴脚。</p>
+              </div>
+              <div class="rule-card">
+                <div style="font-size:1.5rem;margin-bottom:0.4rem;">✋</div>
+                <h4>二次运球</h4>
+                <p>运球停止后不可再次运球。常见误区：持球后做假动作再运球属违例。但运球后传球被防守碰弹回可以重新运球，或者投篮被盖后可重新运球。</p>
+              </div>
+              <div class="rule-card">
+                <div style="font-size:1.5rem;margin-bottom:0.4rem;">⏱️</div>
+                <h4>24秒进攻时限</h4>
+                <p>NBA和国际规则均为24秒。进攻方持球时计时器开始计时，碰到篮圈后（无论进入与否）计时器重置。违例则判罚对方发边线球。</p>
+              </div>
+              <div class="rule-card">
+                <div style="font-size:1.5rem;margin-bottom:0.4rem;">🤝</div>
+                <h4>防守犯规判定</h4>
+                <p>防守者需在进攻球员起跳前站定位置（合法防守位置）。若进攻球员已起跳，防守方不得进入其落地空间，否则判阻挡犯规。手部仍在球上的合法防守不算犯规。</p>
+              </div>
+            </div>
+          </div>
+          <div class="article-extra">
+            <div class="article-section" style="margin-top:1.25rem;">
+              <h4>常见争议判罚解析</h4>
+              <div class="article-list">
+                <div class="article-list-item"><strong>带球撞人 vs 阻挡犯规：</strong>关键在于防守者是否建立了合法防守位置（双脚着地、面对进攻方）</div>
+                <div class="article-list-item"><strong>合法掩护与非法掩护：</strong>掩护设置时必须站定，不能移动或宽出手臂增加接触面</div>
+                <div class="article-list-item"><strong>投篮后的干扰球：</strong>球在篮圈上或篮筐上方飞行弧线下降阶段不得触碰</div>
+                <div class="article-list-item"><strong>三秒违例：</strong>进攻方球员不得在禁区停留超过3秒，但积极争抢位置时有一步缓冲</div>
+              </div>
+            </div>
+          </div>
+          <div class="article-footer">
+            <div class="article-tags">
+              <span class="art-tag">规则</span>
+              <span class="art-tag">犯规判定</span>
+              <span class="art-tag">违例</span>
+            </div>
+            <button class="expand-btn" onclick="toggleArticle(this)">展开全文 ↓</button>
+          </div>
+        </div>
+
+        <!-- Article 3: Basketball IQ -->
+        <div class="article-card animate-in knowledge-card" data-category="mental">
+          <div class="article-header">
+            <div class="article-meta">
+              <span class="article-cat">🧠 心理训练</span>
+              <span class="article-read-time">⏱ 阅读约7分钟</span>
+            </div>
+            <h3>提升篮球IQ：在场上比对手"多看一步"的思维训练法</h3>
+            <p>篮球智商（Basketball IQ）是指球员阅读比赛、预判走势、快速决策的综合能力。高篮球IQ的球员往往能在不具备绝对身体优势的情况下占据主导。</p>
+          </div>
+          <div class="article-body">
+            <div class="article-section">
+              <h4>场上阅读能力的五个维度</h4>
+              <div class="article-list">
+                <div class="article-list-item"><strong>空间意识：</strong>时刻清楚5名队友、5名对手和球的场上位置</div>
+                <div class="article-list-item"><strong>防守识别：</strong>快速判断对方是人盯人还是区域联防，以及联防轮转规律</div>
+                <div class="article-list-item"><strong>错位利用：</strong>在挡拆后迅速判断错位（速度差/身高差）并加以利用</div>
+                <div class="article-list-item"><strong>节奏控制：</strong>通过运球节奏和传球时机调动防守，创造最佳出手时机</div>
+                <div class="article-list-item"><strong>无球价值：</strong>不持球时通过跑动和站位为队友创造空间，不是接球者也是战术的一部分</div>
+              </div>
+            </div>
+            <div class="article-section">
+              <h4>提升篮球IQ的实用方法</h4>
+              <div class="article-list">
+                <div class="article-list-item">观看NBA/CBA比赛时关注无球球员的跑位，而不只盯着球看</div>
+                <div class="article-list-item">每场比赛或练习后做简短复盘，思考3个"可以做更好的决定"</div>
+                <div class="article-list-item">练习时主动与队友沟通战术意图，提高团队默契度</div>
+                <div class="article-list-item">学习一支顶级球队的进攻体系，理解每个跑位背后的战术逻辑</div>
+              </div>
+            </div>
+          </div>
+          <div class="article-extra">
+            <div class="tip-box">
+              <strong>🧠 认知负荷理论：</strong>当基础技术已经"自动化"（无需有意识思考），大脑才能腾出资源来做战术判断。这就是为什么技术训练要反复练到肌肉记忆，才能真正释放篮球IQ。
+            </div>
+            <div class="article-section">
+              <h4>心理状态与发挥的关系</h4>
+              <p>研究表明，适度的唤醒水平（紧张感）有助于提升运动表现——但过高的焦虑会导致注意力狭窄、动作变形。在大赛前通过控制呼吸（吸气4秒-憋气4秒-呼气6秒）可以快速调节神经系统到最佳状态。</p>
+            </div>
+          </div>
+          <div class="article-footer">
+            <div class="article-tags">
+              <span class="art-tag">篮球IQ</span>
+              <span class="art-tag">心理</span>
+              <span class="art-tag">决策</span>
+            </div>
+            <button class="expand-btn" onclick="toggleArticle(this)">展开全文 ↓</button>
+          </div>
+        </div>
+
+        <!-- Article 4: Fitness -->
+        <div class="article-card animate-in knowledge-card" data-category="fitness">
+          <div class="article-header">
+            <div class="article-meta">
+              <span class="article-cat">💪 体能训练</span>
+              <span class="article-read-time">⏱ 阅读约6分钟</span>
+            </div>
+            <h3>篮球专项体能训练：爆发力、速度与耐力的科学提升方案</h3>
+            <p>篮球是一项需要爆发力、横向移动速度和无氧耐力的复合型运动。针对性的体能训练能让你在场上比对手更快、更强、更持久。</p>
+          </div>
+          <div class="article-body">
+            <div class="article-section">
+              <h4>篮球体能的三大核心素质</h4>
+              <div class="article-list">
+                <div class="article-list-item"><strong>爆发力（Power）：</strong>起跳高度、冲刺加速、快速制动的基础</div>
+                <div class="article-list-item"><strong>横向移动速度：</strong>防守滑步、绕挡拆、快速换向的关键</div>
+                <div class="article-list-item"><strong>无氧耐力：</strong>维持高强度动作的能力，避免末段体力下滑</div>
+              </div>
+            </div>
+            <div class="article-section">
+              <h4>推荐训练动作（每周3次）</h4>
+              <div class="article-list">
+                <div class="article-list-item"><strong>Box Jump（箱跳）：</strong>3组×6次，最大化募集快肌纤维，发展垂直弹跳</div>
+                <div class="article-list-item"><strong>侧向Bound：</strong>单脚横向跳跃×3组，模拟防守滑步的爆发模式</div>
+                <div class="article-list-item"><strong>深蹲（Squat）：</strong>4组×6-8次，建立下肢力量基础，推荐前蹲或箱式深蹲</div>
+                <div class="article-list-item"><strong>全场冲刺×10：</strong>无氧乳酸耐力训练，组间休息控制在45秒内</div>
+                <div class="article-list-item"><strong>五角星移动：</strong>5个方向快速起步，提升多方向启动速度</div>
+              </div>
+            </div>
+          </div>
+          <div class="article-extra">
+            <div class="info-box">
+              <strong>训练周期化建议：</strong>力量期（4-6周）→ 爆发力转化期（3-4周）→ 速度应用期（2-3周）→ 维持/减量期（1-2周）。避免全年无差别训练导致疲劳积累。
+            </div>
+            <div class="article-section">
+              <h4>恢复的重要性</h4>
+              <p>肌肉力量和爆发力实际在休息时增长。高质量睡眠（7-9小时）、主动恢复（泡沫轴、轻度有氧）和营养补充（训练后30分钟内摄入蛋白质）是体能训练效果的关键保障。切勿连续训练超过3天不休息。</p>
+            </div>
+          </div>
+          <div class="article-footer">
+            <div class="article-tags">
+              <span class="art-tag">爆发力</span>
+              <span class="art-tag">速度</span>
+              <span class="art-tag">体能周期</span>
+            </div>
+            <button class="expand-btn" onclick="toggleArticle(this)">展开全文 ↓</button>
+          </div>
+        </div>
+
+        <!-- Article 5: Nutrition -->
+        <div class="article-card animate-in knowledge-card" data-category="nutrition">
+          <div class="article-header">
+            <div class="article-meta">
+              <span class="article-cat">🥗 营养健康</span>
+              <span class="article-read-time">⏱ 阅读约5分钟</span>
+            </div>
+            <h3>篮球运动员的营养策略：训练前中后的补给方案</h3>
+            <p>良好的营养是运动表现的基础。正确的饮食策略不仅能提升训练效果，还能加速恢复，预防运动伤害。</p>
+          </div>
+          <div class="article-body">
+            <div class="tips-grid">
+              <div class="quick-tip">
+                <span class="tip-icon">🍚</span>
+                <h4>训练前2-3小时</h4>
+                <p>以复合碳水化合物为主（米饭、燕麦、全麦面包），搭配适量蛋白质，为训练提供持续能量。避免高脂肪食物。</p>
+              </div>
+              <div class="quick-tip">
+                <span class="tip-icon">🍌</span>
+                <h4>训练前30-60分钟</h4>
+                <p>小份快速碳水（香蕉、能量棒），迅速补充糖原，配合适量咖啡因（约200mg）可提升专注力和爆发力。</p>
+              </div>
+              <div class="quick-tip">
+                <span class="tip-icon">🥛</span>
+                <h4>训练后30分钟内</h4>
+                <p>优质蛋白（鸡胸肉、蛋白粉、牛奶）+ 简单碳水（白米饭、果汁），以3:1碳蛋比例摄入，促进肌肉合成与糖原恢复。</p>
+              </div>
+            </div>
+            <div class="article-section">
+              <h4>补水策略</h4>
+              <p>脱水2%体重就会显著影响运动表现和认知功能。建议：训练前2小时饮水500ml；每20分钟补充150-200ml；训练后每损失1公斤体重补充1.5升水。长时间（>60分钟）高强度训练可考虑运动饮料补充电解质。</p>
+            </div>
+          </div>
+          <div class="article-extra">
+            <div class="article-section">
+              <h4>长期饮食建议</h4>
+              <div class="article-list">
+                <div class="article-list-item">蛋白质摄入：体重每公斤1.6-2.2g，分散在全天各餐摄入</div>
+                <div class="article-list-item">碳水化合物是主要能量来源，占总热量50-60%，优先选择全谷物和蔬菜</div>
+                <div class="article-list-item">健康脂肪（鱼油、坚果、橄榄油）有助于减少炎症反应，加速恢复</div>
+                <div class="article-list-item">充足的微量营养素（维生素D、钙、铁、镁）对骨骼健康和肌肉功能至关重要</div>
+              </div>
+            </div>
+          </div>
+          <div class="article-footer">
+            <div class="article-tags">
+              <span class="art-tag">营养</span>
+              <span class="art-tag">补水</span>
+              <span class="art-tag">恢复</span>
+            </div>
+            <button class="expand-btn" onclick="toggleArticle(this)">展开全文 ↓</button>
+          </div>
+        </div>
+
+        <!-- Article 6: Defense Fundamentals -->
+        <div class="article-card animate-in knowledge-card" data-category="technique">
+          <div class="article-header">
+            <div class="article-meta">
+              <span class="article-cat">🎯 技术原理</span>
+              <span class="article-read-time">⏱ 阅读约6分钟</span>
+            </div>
+            <h3>防守基础理论：个人防守到协防轮转的系统思维</h3>
+            <p>"进攻赢球，防守赢冠军"——防守是篮球中最考验专注度和团队协作的技术领域，也是许多球员容易忽视的提升方向。</p>
+          </div>
+          <div class="article-body">
+            <div class="article-section">
+              <h4>个人防守的核心原则</h4>
+              <div class="article-list">
+                <div class="article-list-item"><strong>站位原则：</strong>永远处于进攻球员和篮圈的连线上，始终比进攻球员更靠近篮圈</div>
+                <div class="article-list-item"><strong>压球原则：</strong>对持球人施压，减少其舒适的传球与出手选择</div>
+                <div class="article-list-item"><strong>眼神原则：</strong>盯腰部（重心），不追手部和球的假动作</div>
+                <div class="article-list-item"><strong>跟脚步原则：</strong>对手每一步移动都要有对应的防守脚步回应</div>
+              </div>
+            </div>
+            <div class="article-section">
+              <h4>团队防守的轮转原理</h4>
+              <p>当队友被突破，协防球员需要及时补位保护内线。这时有原本防守对象的球员要同步轮转，确保场上没有空位。协防后的轮转沟通至关重要——必须大声指挥，让队友知道该去防守谁。</p>
+            </div>
+          </div>
+          <div class="article-extra">
+            <div class="article-section">
+              <h4>防守效率的量化指标</h4>
+              <div class="article-list">
+                <div class="article-list-item"><strong>防守效率（DRTG）：</strong>每100次进攻对方的得分，越低越好</div>
+                <div class="article-list-item"><strong>有效命中率允许（eFG% allowed）：</strong>对方在你防守下的投篮效率</div>
+                <div class="article-list-item"><strong>盒子正负值（Box Plus/Minus）：</strong>综合衡量防守贡献的高级数据</div>
+                <div class="article-list-item">即使没有数据，观察"对手投你把守方向的次数"也是简单有效的自我评估方法</div>
+              </div>
+            </div>
+          </div>
+          <div class="article-footer">
+            <div class="article-tags">
+              <span class="art-tag">防守原理</span>
+              <span class="art-tag">协防</span>
+              <span class="art-tag">轮转</span>
+            </div>
+            <button class="expand-btn" onclick="toggleArticle(this)">展开全文 ↓</button>
+          </div>
+        </div>
+
+        <!-- Article 7: Injury Prevention -->
+        <div class="article-card animate-in knowledge-card" data-category="fitness">
+          <div class="article-header">
+            <div class="article-meta">
+              <span class="article-cat">💪 体能训练</span>
+              <span class="article-read-time">⏱ 阅读约5分钟</span>
+            </div>
+            <h3>篮球运动伤害预防：脚踝、膝盖、手指的保护与康复</h3>
+            <p>脚踝扭伤、膝关节伤害和手指戳伤是篮球运动中最常见的伤害。正确的预防措施和应急处理可以大幅降低伤害风险。</p>
+          </div>
+          <div class="article-body">
+            <div class="article-section">
+              <h4>最常见篮球伤害与预防</h4>
+              <div class="article-list">
+                <div class="article-list-item"><strong>脚踝扭伤（最常见）：</strong>训练前充分热身踝关节，穿高帮鞋或使用护踝。加强腓骨肌、胫后肌的强化训练。落地时注意膝盖弯曲，避免直腿着地</div>
+                <div class="article-list-item"><strong>膝关节（半月板/韧带）：</strong>强化股四头肌和腘绳肌平衡，落地技术要规范（软着地），避免膝盖内扣（Knee Cave）</div>
+                <div class="article-list-item"><strong>手指戳伤：</strong>接球时手指张开主动迎球，不要等球砸到指尖。扭伤后立即冷敷，轻度损伤可用胶带固定绑扎相邻手指</div>
+                <div class="article-list-item"><strong>跟腱问题：</strong>充分热身小腿肌群，避免突然大幅增加训练量（不超过每周10%增量法则）</div>
+              </div>
+            </div>
+          </div>
+          <div class="article-extra">
+            <div class="tip-box">
+              <strong>RICE急救原则：</strong><strong style="color:var(--primary);">R</strong>est（休息）、<strong style="color:var(--primary);">I</strong>ce（冰敷，每次15-20分钟）、<strong style="color:var(--primary);">C</strong>ompression（加压包扎）、<strong style="color:var(--primary);">E</strong>levation（抬高患处）。急性损伤后24-48小时内适用，之后可改为热敷促进恢复。
+            </div>
+          </div>
+          <div class="article-footer">
+            <div class="article-tags">
+              <span class="art-tag">伤害预防</span>
+              <span class="art-tag">脚踝</span>
+              <span class="art-tag">RICE</span>
+            </div>
+            <button class="expand-btn" onclick="toggleArticle(this)">展开全文 ↓</button>
+          </div>
+        </div>
+
+        <!-- Article 8: Mental Toughness -->
+        <div class="article-card animate-in knowledge-card" data-category="mental">
+          <div class="article-header">
+            <div class="article-meta">
+              <span class="article-cat">🧠 心理训练</span>
+              <span class="article-read-time">⏱ 阅读约7分钟</span>
+            </div>
+            <h3>比赛心理：如何在关键时刻保持专注与自信</h3>
+            <p>篮球的最后2分钟往往是整场比赛最关键的时段。心理素质决定了球员能否在压力下发挥出平时80%以上的水准。</p>
+          </div>
+          <div class="article-body">
+            <div class="article-section">
+              <h4>关键时刻常见的心理误区</h4>
+              <div class="article-list">
+                <div class="article-list-item"><strong>结果焦虑：</strong>过于关注比赛结果而忽略当下的每一个执行细节</div>
+                <div class="article-list-item"><strong>失误恐惧：</strong>害怕失误导致动作变形、出手犹豫，形成自我实现的负面循环</div>
+                <div class="article-list-item"><strong>过度思考：</strong>关键时刻想太多战术，反而影响已经自动化的技术动作</div>
+                <div class="article-list-item"><strong>比较他人：</strong>因为队友或对手发挥而影响自己的专注状态</div>
+              </div>
+            </div>
+            <div class="article-section">
+              <h4>实用心理技巧</h4>
+              <div class="article-list">
+                <div class="article-list-item"><strong>专注当下：</strong>用"一球一球"的思维，只专注于眼前这一次防守或进攻</div>
+                <div class="article-list-item"><strong>积极自我对话：</strong>用"我能做到"替代"不要失误"，正面指令激活肌肉</div>
+                <div class="article-list-item"><strong>程序锚定：</strong>罚球前的固定仪式（拍球次数、深呼吸）帮助切换到专注状态</div>
+                <div class="article-list-item"><strong>重置按钮：</strong>失误后有意识地做一个动作（如拍大腿），象征性"重置"情绪状态</div>
+              </div>
+            </div>
+          </div>
+          <div class="article-extra">
+            <div class="info-box">
+              <strong>心流（Flow State）：</strong>当技能水平与挑战难度匹配时，球员容易进入"心流"状态——感觉一切动作自然流畅，时间感改变。提升技术水平和选择适当难度的训练是进入心流的前提。
+            </div>
+          </div>
+          <div class="article-footer">
+            <div class="article-tags">
+              <span class="art-tag">心理</span>
+              <span class="art-tag">比赛状态</span>
+              <span class="art-tag">专注力</span>
+            </div>
+            <button class="expand-btn" onclick="toggleArticle(this)">展开全文 ↓</button>
+          </div>
+        </div>
+
+        <!-- Article 9: Rules - Positions -->
+        <div class="article-card animate-in knowledge-card" data-category="rules">
+          <div class="article-header">
+            <div class="article-meta">
+              <span class="article-cat">📋 规则解析</span>
+              <span class="article-read-time">⏱ 阅读约5分钟</span>
+            </div>
+            <h3>五个位置的职责解析：从控球后卫到中锋的角色分工</h3>
+            <p>现代篮球越来越强调"无位置化"，但了解传统五个位置的职责依然是理解篮球战术体系的基础。</p>
+          </div>
+          <div class="article-body">
+            <div class="rules-grid">
+              <div class="rule-card">
+                <div style="font-size:1.5rem;margin-bottom:0.4rem;">①</div>
+                <h4>控球后卫（PG）</h4>
+                <p>球队指挥官，负责推进节奏、组织进攻、传导球。需要最高的篮球IQ，是队内战术执行的核心。代表球员：科比·约翰逊、史蒂芬·库里。</p>
+              </div>
+              <div class="rule-card">
+                <div style="font-size:1.5rem;margin-bottom:0.4rem;">②</div>
+                <h4>得分后卫（SG）</h4>
+                <p>球队主要得分手之一，需要出色的外线投篮和无球跑动能力。通常也是重要的防守锁链。代表球员：迈克尔·乔丹、科比·布莱恩特。</p>
+              </div>
+              <div class="rule-card">
+                <div style="font-size:1.5rem;margin-bottom:0.4rem;">③</div>
+                <h4>小前锋（SF）</h4>
+                <p>全能型位置，兼顾得分、突破和防守。现代小前锋需要具备外线投篮能力。代表球员：勒布朗·詹姆斯、凯文·杜兰特。</p>
+              </div>
+              <div class="rule-card">
+                <div style="font-size:1.5rem;margin-bottom:0.4rem;">④⑤</div>
+                <h4>大前锋与中锋</h4>
+                <p>内线核心，负责禁区得分、篮板和内线保护。现代4号位需具备外线投篮，5号位防守和护筐仍是核心价值。代表球员：诺维茨基、约基奇。</p>
+              </div>
+            </div>
+          </div>
+          <div class="article-footer">
+            <div class="article-tags">
+              <span class="art-tag">位置职责</span>
+              <span class="art-tag">球队分工</span>
+              <span class="art-tag">战术理解</span>
+            </div>
+            <button class="expand-btn" onclick="toggleArticle(this)">展开全文 ↓</button>
+          </div>
+        </div>
+
+      </div><!-- end kb-articles -->
+    </div><!-- end knowledge-layout -->
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:1rem;">
+          <div class="logo-icon">🏀</div>
+          <div class="logo-text">
+            <span class="site-name">篮球训练营</span>
+            <span class="site-sub">BASKETBALL ACADEMY</span>
+          </div>
+        </a>
+        <p>系统化篮球知识平台，助你全面提升球技与理解。</p>
+      </div>
+      <div class="footer-col">
+        <h4>知识分类</h4>
+        <ul>
+          <li><a href="#">规则解析</a></li>
+          <li><a href="#">技术原理</a></li>
+          <li><a href="#">体能训练</a></li>
+          <li><a href="#">心理训练</a></li>
+          <li><a href="#">营养健康</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>快速导航</h4>
+        <ul>
+          <li><a href="index.html">首页</a></li>
+          <li><a href="drills.html">训练动作</a></li>
+          <li><a href="plans.html">训练计划</a></li>
+          <li><a href="tactics.html">战术板</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>热门文章</h4>
+        <ul>
+          <li><a href="#">投篮力学详解</a></li>
+          <li><a href="#">篮球规则解析</a></li>
+          <li><a href="#">提升篮球IQ</a></li>
+          <li><a href="#">体能训练方案</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 <span>篮球训练营</span> · 热爱篮球，专注进步 🏀
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+function filterKB(el, cat) {
+  document.querySelectorAll('.kb-cat-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  const cards = document.querySelectorAll('.knowledge-card[data-category]');
+  cards.forEach(card => {
+    if (cat === 'all' || card.dataset.category === cat) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+}
+
+function toggleArticle(btn) {
+  const card = btn.closest('.article-card');
+  const extra = card.querySelector('.article-extra');
+  if (extra) {
+    extra.classList.toggle('open');
+    btn.textContent = extra.classList.contains('open') ? '收起 ↑' : '展开全文 ↓';
+  }
+}
+</script>
 </body>
 </html>
